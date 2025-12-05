@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import { GamePlayer, Cheat, RACredentials } from 'koin-deck-retro-player';
-import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown } from 'lucide-react';
+import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown, Github } from 'lucide-react';
 import * as SaveManager from '../lib/save-manager';
 
 // System Data
@@ -13,8 +13,8 @@ const SYSTEMS = [
     { id: 'gb', name: 'Game Boy', shortName: 'GB', color: '#76FF03', core: 'gambatte' },
     { id: 'gbc', name: 'Game Boy Color', shortName: 'GBC', color: '#F50057', core: 'gambatte' },
     { id: 'gba', name: 'Game Boy Advance', shortName: 'GBA', color: '#304FFE', core: 'mgba' },
-    { id: 'genesis', name: 'Sega Genesis', shortName: 'Genesis', color: '#2979FF', core: 'genesis_plus_gx' },
-    { id: 'mastersystem', name: 'Sega Master System', shortName: 'SMS', color: '#FF3D00', core: 'gearsystem' },
+    { id: 'genesis', name: 'Sega Genesis', shortName: 'MD', color: '#2962FF', core: 'genesis_plus_gx' },
+    { id: 'mastersystem', name: 'Master System', shortName: 'SMS', color: '#00B0FF', core: 'genesis_plus_gx' },
     { id: 'gamegear', name: 'Sega Game Gear', shortName: 'GG', color: '#1DE9B6', core: 'gearsystem' },
     { id: 'ps1', name: 'PlayStation', shortName: 'PS1', color: '#448AFF', core: 'pcsx_rearmed' },
     { id: 'pcengine', name: 'PC Engine', shortName: 'PCE', color: '#FF9100', core: 'mednafen_pce_fast' },
@@ -147,21 +147,34 @@ export default function GameDashboard() {
 
     if (isPlaying && romUrl) {
         return (
-            <div className="fixed inset-0 bg-[#0f0f0f] z-50">
+            <div className="w-screen h-screen bg-black relative overflow-hidden">
+                {/* Back Button Overlay */}
+                <button
+                    onClick={() => {
+                        setIsPlaying(false);
+                        setRomUrl(null);
+                        setRomFile(null);
+                    }}
+                    className="absolute top-4 left-4 z-50 bg-[#FFD600] text-black font-black uppercase text-xs px-3 py-1 border-2 border-white shadow-[2px_2px_0px_0px_#FFF] hover:translate-y-[1px] hover:shadow-none transition-all"
+                >
+                    ◄ EJECT DISK
+                </button>
+
                 <GamePlayer
+                    system={selectedSystem.id}
+
+                    core={selectedSystem.core}
                     romUrl={romUrl}
                     romId={romFile?.name || romUrl || 'unknown'}
-                    system={selectedSystem.id}
-                    core={selectedSystem.core}
                     title={romFile?.name || 'Game'}
                     systemColor={selectedSystem.color}
                     biosUrl={biosUrl || undefined}
+                    raUser={raUser || undefined}
                     onExit={() => setIsPlaying(false)}
                     onSaveState={handleSaveState}
                     onLoadState={handleLoadState}
                     onGetSaveSlots={handleGetSlots}
                     onDeleteSaveState={handleDeleteSlot}
-                    raUser={raUser}
                     onRALogin={handleRALogin}
                     onRALogout={() => setRaUser(null)}
                     cheats={MOCK_CHEATS[selectedSystem.id] || []}
@@ -185,27 +198,40 @@ export default function GameDashboard() {
                     </div>
                 </div>
 
-                {raUser ? (
-                    <div className="flex items-center gap-3 border-2 border-black bg-white px-3 py-1.5 shadow-[3px_3px_0px_0px_#000]">
-                        <div className="w-6 h-6 bg-green-500 border-2 border-black rounded-full flex items-center justify-center">
-                            <User size={12} className="text-white" />
+                <div className="flex items-center gap-3">
+                    {/* GitHub Link */}
+                    <a
+                        href="https://github.com/muditjuneja/koin-deck-retro-player"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-8 h-8 flex items-center justify-center border-2 border-black bg-white shadow-[3px_3px_0px_0px_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] transition-all"
+                        aria-label="View Source on GitHub"
+                    >
+                        <Github size={16} />
+                    </a>
+
+                    {raUser ? (
+                        <div className="flex items-center gap-3 border-2 border-black bg-white px-3 py-1.5 shadow-[3px_3px_0px_0px_#000]">
+                            <div className="w-6 h-6 bg-green-500 border-2 border-black rounded-full flex items-center justify-center">
+                                <User size={12} className="text-white" />
+                            </div>
+                            <div className="hidden md:block">
+                                <div className="font-bold text-xs uppercase">{raUser.username}</div>
+                                <div className="text-[9px] font-mono leading-none">SCORE: {raUser.score}</div>
+                            </div>
+                            <button
+                                onClick={() => setRaUser(null)}
+                                className="ml-2 hover:bg-black hover:text-white p-1 rounded-sm transition-colors"
+                            >
+                                <X size={12} />
+                            </button>
                         </div>
-                        <div className="hidden md:block">
-                            <div className="font-bold text-xs uppercase">{raUser.username}</div>
-                            <div className="text-[9px] font-mono leading-none">SCORE: {raUser.score}</div>
+                    ) : (
+                        <div className="border-2 border-black bg-[#E0E0E0] px-3 py-1 text-[10px] font-bold text-gray-500 shadow-[2px_2px_0px_0px_#000]">
+                            GUEST MODE
                         </div>
-                        <button
-                            onClick={() => setRaUser(null)}
-                            className="ml-2 hover:bg-black hover:text-white p-1 rounded-sm transition-colors"
-                        >
-                            <X size={12} />
-                        </button>
-                    </div>
-                ) : (
-                    <div className="border-2 border-black bg-[#E0E0E0] px-3 py-1 text-[10px] font-bold text-gray-500 shadow-[2px_2px_0px_0px_#000]">
-                        GUEST MODE
-                    </div>
-                )}
+                    )}
+                </div>
             </header>
 
             {/* Main Command Center */}
@@ -325,16 +351,25 @@ export default function GameDashboard() {
                     </div>
 
                     {/* Footer Info */}
-                    <div className="mt-4 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest space-y-1">
-                        <div>
-                            <a href="https://koin.theretrosaga.com/" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline transition-colors">
-                                POWERED BY KOIN DECK
-                            </a>
+                    <div className="mt-6 text-center text-[10px] font-bold text-gray-400 uppercase tracking-widest space-y-4">
+
+                        {/* Systems List */}
+                        <div className="max-w-md mx-auto leading-relaxed opacity-60">
+                            <span className="text-[#FFD600] bg-black px-1 mr-2">SUPPORTED CORES</span>
+                            {SYSTEMS.map(s => s.shortName).join(' / ')}
                         </div>
-                        <div className="text-[9px] text-gray-300">
-                            CORE BUILT ON <a href="https://nostalgist.js.org/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-500 underline">NOSTALGIST.JS</a>
+
+                        <div className="space-y-1">
+                            <div>
+                                <a href="https://koin.theretrosaga.com/" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline transition-colors">
+                                    POWERED BY KOIN DECK
+                                </a>
+                            </div>
+                            <div className="text-[9px] text-gray-300">
+                                CORE BUILT ON <a href="https://nostalgist.js.org/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-500 underline">NOSTALGIST.JS</a>
+                            </div>
+                            <div>v0.1.4</div>
                         </div>
-                        <div>v0.1.4</div>
                     </div>
                 </div>
             </main>
