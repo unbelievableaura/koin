@@ -3,6 +3,10 @@
 
 > **Your Games. Your Saves. Your Legacy.**
 
+[![Try the Demo](https://img.shields.io/badge/PLAY-TRY%20THE%20DEMO-FFD600?style=for-the-badge&logoColor=black&labelColor=black)](https://koin-retro-player.theretrosaga.com/)
+[![NPM Version](https://img.shields.io/npm/v/koin-deck-retro-player?style=for-the-badge&color=white&labelColor=black)](https://www.npmjs.com/package/koin-deck-retro-player)
+[![License](https://img.shields.io/npm/l/koin-deck-retro-player?style=for-the-badge&color=white&labelColor=black)](LICENSE)
+
 The high-performance, preservation-focused emulation engine powering [Koin Deck](https://koin.theretrosaga.com/). Built for those who remember blowing into cartridges, but demand the convenience of the cloud.
 
 ![Koin Deck Retro Player](https://raw.githubusercontent.com/beingmudit/retro-game-player/main/screenshot.png)
