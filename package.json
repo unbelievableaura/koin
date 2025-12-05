@@ -1,7 +1,7 @@
 {
     "name": "koin-deck-retro-player",
     "version": "0.1.0",
-    "description": "Koin Deck Retro Player - A modern, opinionated React component for playing retro games within the Koin Deck ecosystem",
+    "description": "The premium cloud emulation engine for Koin Deck. High-performance, preservation-focused retro gaming in the browser.",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",

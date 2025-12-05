@@ -1,19 +1,50 @@
-# Koin Deck Retro Player
+# KOIN DECK RETRO PLAYER
+## The Premium Cloud Emulator Engine
 
-A modern, opinionated React component for playing retro games in the browser, built for the **Koin Deck** ecosystem. Built on top of [Nostalgist.js](https://nostalgist.js.org/) and [RetroArch](https://www.retroarch.com/).
+> **Your Games. Your Saves. Your Legacy.**
 
-![Retro Game Player Screenshot](https://raw.githubusercontent.com/beingmudit/retro-game-player/main/screenshot.png)
+The high-performance, preservation-focused emulation engine powering [Koin Deck](https://koin.theretrosaga.com/). Built for those who remember blowing into cartridges, but demand the convenience of the cloud.
+
+![Koin Deck Retro Player](https://raw.githubusercontent.com/beingmudit/retro-game-player/main/screenshot.png)
+
+## Core Philosophy
+
+- **Immortalized Collection**: Designed to interface with permanent cloud storage.
+- **Enhanced Play**: Experience games better than original hardware with rewind, cheats, and achievements.
+- **Privacy Focused**: Built for zero-knowledge architectures. Your data, your rules.
+- **High-Contrast Brutality**: A neo-brutalist aesthetic that puts the game first.
 
 ## Features
 
-- 🎮 **Multi-System Support**: NES, SNES, Genesis, Game Boy, GBA, N64, PlayStation, and more.
-- 💾 **Save States**: Save and load your game progress instantly.
-- ⏪ **Rewind**: Mistakes happen. Rewind time to fix them.
-- 🎮 **Gamepad Support**: Plug and play support for standard controllers.
-- ⌨️ **Customizable Controls**: Remap keyboard and gamepad inputs.
-- 🏆 **RetroAchievements**: Login to track your achievements (requires account).
-- 🎨 **Theming**: System-specific colors and icons.
-- 📱 **Mobile Friendly**: Touch controls and responsive design.
+- 🎮 **Universal Compatibility**: From NES to PlayStation, supporting a vast library of systems.
+- ☁️ **Cloud Sync Ready**: Hooks for instant save-state uploads and synchronization.
+- ⏪ **Rewind Time**: Mistakes happen. Fix them instantly.
+- 🏆 **RetroAchievements**: Native integration for tracking your legacy.
+- 🔒 **Secure Execution**: Sandboxed WASM environment via Nostalgist.js.
+- 📱 **Adaptive Controls**: Touch controls that actually feel good, plus gamepad support.
+
+## Supported Systems
+
+| System | Key | Core |
+|--------|-----|------|
+| **Nintendo** |
+| Nintendo Entertainment System (NES) | `NES` | fceumm |
+| Super Nintendo (SNES) | `SNES` | snes9x |
+| Nintendo 64 | `N64` | mupen64plus_next |
+| Game Boy / Color / Advance | `GB`, `GBC`, `GBA` | gambatte, mgba |
+| Virtual Boy | `VIRTUAL_BOY` | mednafen_vb |
+| **Sega** |
+| Sega Genesis / Mega Drive | `GENESIS` | genesis_plus_gx |
+| Sega Master System | `MASTER_SYSTEM` | gearsystem |
+| Sega Game Gear | `GAME_GEAR` | gearsystem |
+| **Sony** |
+| PlayStation | `PS1` | pcsx_rearmed |
+| **Other** |
+| PC Engine / TurboGrafx-16 | `PC_ENGINE` | mednafen_pce_fast |
+| Neo Geo / Pocket / Color | `NEOGEO`, `NEOGEO_POCKET` | fbalpha, mednafen_ngp |
+| WonderSwan / Color | `WONDERSWAN` | mednafen_wswan |
+| Atari 2600 / 7800 / Lynx | `ATARI_2600`, `LYNX` | stella, handy |
+| Arcade (MAME) | `ARCADE` | mame2003_plus |
 
 ## Installation
 
@@ -112,26 +143,7 @@ function App() {
 }
 ```
 
-## Supported Systems
 
-| System | Key | Core | Extensions |
-|--------|-----|------|------------|
-| Nintendo Entertainment System | `NES` | fceumm | .nes |
-| Super Nintendo | `SNES` | snes9x | .sfc, .smc |
-| Nintendo 64 | `N64` | mupen64plus_next | .n64, .z64 |
-| Game Boy | `GB` | gambatte | .gb |
-| Game Boy Color | `GBC` | gambatte | .gbc |
-| Game Boy Advance | `GBA` | mgba | .gba |
-| Sega Genesis / Mega Drive | `GENESIS` | genesis_plus_gx | .md, .gen |
-| Sega Master System | `MASTER_SYSTEM` | gearsystem | .sms |
-| Sega Game Gear | `GAME_GEAR` | gearsystem | .gg |
-| PlayStation | `PS1` | pcsx_rearmed | .iso, .cue, .pbp |
-| PC Engine / TurboGrafx-16 | `PC_ENGINE` | mednafen_pce_fast | .pce |
-| Neo Geo Pocket | `NEOGEO_POCKET` | mednafen_ngp | .ngp, .ngc |
-| WonderSwan | `WONDERSWAN` | mednafen_wswan | .ws, .wsc |
-| Atari 2600 | `ATARI_2600` | stella | .a26 |
-| Atari 7800 | `ATARI_7800` | prosystem | .a78 |
-| Atari Lynx | `LYNX` | handy | .lnx |
 
 ## Props
 
