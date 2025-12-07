@@ -82,7 +82,7 @@ export function useAutoSave({
                     }
 
                     await activeOnAutoSave(result.blob, screen);
-                    console.log('[GamePlayer] Auto-saved');
+                    // console.log('[GamePlayer] Auto-saved');
                     setAutoSaveState('done');
 
                     // Restart loop after 2 seconds
@@ -135,7 +135,7 @@ export function useAutoSave({
             }
         };
 
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+        const handleBeforeUnload = (_e: BeforeUnloadEvent) => {
             if (!document.hidden) {
                 performEmergencySave();
             }

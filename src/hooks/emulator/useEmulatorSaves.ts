@@ -6,7 +6,8 @@ interface UseEmulatorSavesProps {
     nostalgistRef: MutableRefObject<Nostalgist | null>;
     isPaused: boolean;
     setIsPaused: (paused: boolean) => void;
-    setStatus: (status: any) => void; // Using any to avoid circular dependency with types, or import types
+    setStatus: (status: any) => void;
+    rewindEnabled?: boolean;
 }
 
 interface UseEmulatorSavesReturn {
@@ -21,7 +22,7 @@ interface UseEmulatorSavesReturn {
     stopRewindCapture: () => void;
 }
 
-export function useEmulatorSaves({ nostalgistRef, isPaused, setIsPaused, setStatus }: UseEmulatorSavesProps): UseEmulatorSavesReturn {
+export function useEmulatorSaves({ nostalgistRef, isPaused, setIsPaused, setStatus, rewindEnabled = true }: UseEmulatorSavesProps): UseEmulatorSavesReturn {
     const [isRewinding, setIsRewinding] = useState(false);
     const [rewindBufferSize, setRewindBufferSize] = useState(0); // Track buffer size for UI
 
@@ -79,6 +80,10 @@ export function useEmulatorSaves({ nostalgistRef, isPaused, setIsPaused, setStat
 
     // Start capturing rewind buffer (Afterplay.io style)
     const startRewindCapture = useCallback(() => {
+        if (!rewindEnabled) {
+            return;
+        }
+
         if (rewindCaptureIntervalRef.current) {
             return;
         }

@@ -168,6 +168,7 @@ export interface Cheat {
 
 // RetroAchievements types
 export interface RAHardcodeRestrictions {
+    isHardcore?: boolean;
     canUseSaveStates: boolean;
     canUseRewind: boolean;
     canUseCheats: boolean;

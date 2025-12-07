@@ -103,7 +103,7 @@ export function useGamepad(options?: UseGamepadOptions): UseGamepadReturn {
     const { onConnect, onDisconnect } = options || {};
     const [gamepads, setGamepads] = useState<GamepadInfo[]>([]);
     const rafRef = useRef<number | null>(null);
-    const lastStateRef = useRef<string>('');
+    const lastStateRef = useRef<string>(''); // Kept for logic compatibility or debug
     const prevCountRef = useRef<number>(0);
 
     // Store callbacks in refs to avoid re-running effect when they change
@@ -143,6 +143,7 @@ export function useGamepad(options?: UseGamepadOptions): UseGamepadReturn {
 
     // Refresh function
     const refresh = useCallback(() => {
+        // Force refresh
         setGamepads(getGamepads());
     }, [getGamepads]);
 
@@ -165,28 +166,38 @@ export function useGamepad(options?: UseGamepadOptions): UseGamepadReturn {
 
             const current = getGamepads();
             // Create a simple state signature to compare
-            const stateSignature = current.map(g => `${g.index}:${g.id}`).join('|');
+            // Optimized comparison: check length first, then IDs
+            // Allocating strings every frame is expensive
+            let hasChanged = current.length !== prevCountRef.current;
 
-            if (stateSignature !== lastStateRef.current) {
+            if (!hasChanged) {
+                // Deep check only if counts match
+                // We can just check connections and IDs without creating full signature strings
+                for (let i = 0; i < current.length; i++) {
+                    const saved = gamepads[i];
+                    if (!saved || saved.id !== current[i].id || saved.connected !== current[i].connected) {
+                        hasChanged = true;
+                        break;
+                    }
+                }
+            }
+
+            if (hasChanged) {
                 const prevCount = prevCountRef.current;
                 const currentCount = current.length;
 
-                // Detect connection/disconnection
+                // Detect connection/disconnection logic remains same
                 if (currentCount > prevCount && prevCount >= 0 && onConnectRef.current) {
-                    // New gamepad connected
                     const newGamepad = current[current.length - 1];
                     onConnectRef.current(newGamepad);
                 } else if (currentCount < prevCount && prevCount > 0 && onDisconnectRef.current) {
-                    // Gamepad disconnected
                     onDisconnectRef.current();
                 }
 
                 prevCountRef.current = currentCount;
-                lastStateRef.current = stateSignature;
+                // lastStateRef no longer needed for primary comparison but we keep it if we want to debug
+                // lastStateRef.current = stateSignature;
                 setGamepads(current);
-                if (current.length > 0) {
-                    console.log('[useGamepad] Gamepads updated:', current.map(g => g.name).join(', '));
-                }
             }
 
             rafRef.current = requestAnimationFrame(poll);

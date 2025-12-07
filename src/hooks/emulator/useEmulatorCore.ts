@@ -1,6 +1,7 @@
 import { useState, useRef, useCallback, MutableRefObject, useEffect } from 'react';
 import { Nostalgist } from 'nostalgist';
 import { getCore } from '../../lib/emulator-cores';
+import { PERFORMANCE_TIER_1_SYSTEMS, PERFORMANCE_TIER_2_SYSTEMS } from '../../lib/systems';
 import {
     KeyboardMapping,
     GamepadMapping,
@@ -84,6 +85,37 @@ export function useEmulatorCore({
             return;
         }
 
+        // Helper to get optimized config based on system complexity
+        const getOptimizedConfig = (sysKey: string): Record<string, unknown> => {
+            const sys = sysKey.toUpperCase();
+
+            if (PERFORMANCE_TIER_1_SYSTEMS.has(sys)) {
+                return {
+                    run_ahead_enabled: true,
+                    run_ahead_frames: 1,
+                    run_ahead_secondary_instance: false, // Single instance for WASM efficiency
+                    video_threaded: false, // Tight sync for low latency
+                    audio_latency: 64, // Low latency audio
+                };
+            }
+
+            if (PERFORMANCE_TIER_2_SYSTEMS.has(sys)) {
+                return {
+                    run_ahead_enabled: false,
+                    video_threaded: true, // Offload video to separate thread
+                    audio_latency: 96, // Larger buffer to prevent crackling
+                    rewind_enable: false, // Disable rewind for heavy systems to save RAM
+                };
+            }
+
+            // Default / Balanced
+            return {
+                run_ahead_enabled: false,
+                video_threaded: true,
+                audio_latency: 64,
+            };
+        };
+
         try {
             setStatus('loading');
             setError(null);
@@ -114,6 +146,9 @@ export function useEmulatorCore({
                 gamepads: gamepadBindings,
             });
 
+            // Get performance optimizations
+            const optimizedConfig = getOptimizedConfig(system);
+
             // Convert volume percentage (0-100) to RetroArch dB format
             // RetroArch audio_volume: 0.0 dB = 100%, -20 dB ≈ 10%, -40 dB ≈ 1%
             // Formula: dB = 20 * Math.log10(volume / 100)
@@ -133,7 +168,7 @@ export function useEmulatorCore({
                     rgui_show_start_screen: false,
                     video_font_enable: false,
                     input_menu_toggle_gamepad_combo: 0,
-                    rewind_enable: true,
+                    rewind_enable: true, // Default, can be overridden by optimizedConfig
                     rewind_granularity: 1,
                     rewind_buffer_size: 100,
                     fast_forward_ratio: 2.0,
@@ -143,6 +178,7 @@ export function useEmulatorCore({
                     input_volume_down: 'subtract',
                     input_audio_mute: 'f9',
                     ...inputConfig,
+                    ...optimizedConfig, // Apply system-specific optimizations
                     ...(retroAchievements ? {
                         cheevos_enable: true,
                         cheevos_username: retroAchievements.username,
@@ -374,6 +410,7 @@ export function useEmulatorCore({
             // Fallback: Try to get canvas directly
             const canvas =
                 nostalgistRef.current.getCanvas?.() ||
+                getCanvasElement?.() ||
                 document.querySelector('.game-canvas-container canvas') as HTMLCanvasElement ||
                 document.querySelector('canvas') as HTMLCanvasElement;
 

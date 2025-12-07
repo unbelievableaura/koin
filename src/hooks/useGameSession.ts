@@ -86,6 +86,21 @@ export function useGameSession(props: UseGameSessionProps) {
             console.log('[GamePlayer] Emulator started');
             onSessionStart?.();
             onReady?.();
+
+            // Show coin hint for arcade systems
+            const arcadeSystems = ['arcade', 'neogeo', 'fba', 'mame'];
+            if (arcadeSystems.includes(system.toLowerCase())) {
+                setTimeout(() => {
+                    showToast(
+                        'Press SHIFT to insert coin',
+                        'info',
+                        {
+                            title: '🪙 Insert Coin',
+                            duration: 5000,
+                        }
+                    );
+                }, 1500); // Delay to let the game load first
+            }
         },
         onError: (err) => {
             console.error('[GamePlayer] Emulator error:', err);
@@ -136,14 +151,15 @@ export function useGameSession(props: UseGameSessionProps) {
 
     // Hardcore Restrictions
     const hardcoreRestrictions = useMemo(() => {
-        const isHardcore = retroAchievementsConfig?.hardcore;
+        const isHardcore = !!retroAchievementsConfig?.hardcore;
         return {
+            isHardcore,
             canUseSaveStates: !isHardcore,
-            canUseRewind: !isHardcore,
+            canUseRewind: !isHardcore && (nostalgist.rewindEnabled ?? true),
             canUseCheats: !isHardcore,
             canUseSlowMotion: !isHardcore,
         };
-    }, [retroAchievementsConfig?.hardcore]);
+    }, [retroAchievementsConfig?.hardcore, nostalgist.rewindEnabled]);
 
     return {
         nostalgist,

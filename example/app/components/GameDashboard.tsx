@@ -3,6 +3,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { GamePlayer, Cheat, RACredentials } from 'koin-deck-retro-player';
 import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown, Github, FileCode, Cpu } from 'lucide-react';
+
+// Import player version from parent package.json
+import packageJson from '../../../package.json';
 import * as SaveManager from '../lib/save-manager';
 
 // System Data
@@ -185,6 +188,7 @@ export default function GameDashboard() {
                             system={selectedSystem.id}
                             core={selectedSystem.core}
                             romUrl={currentRomUrl}
+                            romFileName={romFile?.name}
                             romId={romFile?.name || currentRomUrl || 'unknown'}
                             title={romFile?.name || 'Game'}
                             systemColor={selectedSystem.color}
@@ -273,7 +277,7 @@ export default function GameDashboard() {
                                 <div className="w-1.5 h-1.5 rounded-full bg-[#FFD600]"></div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-[#76FF03]"></div>
                             </div>
-                            <span className="text-white font-mono text-[9px] uppercase">v3.0.0 // LAUNCHER</span>
+                            <span className="text-white font-mono text-[9px] uppercase">PLAYER v{packageJson.version}</span>
                         </div>
 
                         <div className="px-6 pb-6 space-y-6">
@@ -384,7 +388,7 @@ export default function GameDashboard() {
                             <div className="text-[9px] text-gray-300">
                                 CORE BUILT ON <a href="https://nostalgist.js.org/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-500 underline">NOSTALGIST.JS</a>
                             </div>
-                            <div>v0.1.4</div>
+                            <div>v{packageJson.version}</div>
                         </div>
                     </div>
                 </div>

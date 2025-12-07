@@ -167,3 +167,19 @@ export function normalizeSystemKey(name: string): string {
 
 // Legacy export names for backward compatibility
 export const SUPPORTED_EXTENSIONS = getSupportedExtensions();
+
+// Performance Optimization Tiers
+// Tier 1: Light systems - Run Ahead capable (Zero Lag)
+export const PERFORMANCE_TIER_1_SYSTEMS = new Set([
+    'NES', 'SNES', 'GENESIS', 'GB', 'GBC',
+    'MASTER_SYSTEM', 'GAME_GEAR', 'PC_ENGINE',
+    'ATARI_2600', 'ATARI_7800', 'LYNX',
+    'NEOGEO_POCKET', 'NEOGEO_POCKET_COLOR',
+    'WONDERSWAN', 'WONDERSWAN_COLOR'
+]);
+
+// Tier 2: Heavy systems - Threaded Video required (Max Smoothness)
+export const PERFORMANCE_TIER_2_SYSTEMS = new Set([
+    'PS1', 'N64', 'GBA', 'SATURN', 'DREAMCAST',
+    'NDS', 'PSP', 'ARCADE', 'DOS', 'NEOGEO'
+]);

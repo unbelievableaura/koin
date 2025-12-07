@@ -25,6 +25,7 @@ interface PlaybackControlsProps {
     systemColor?: string;
     hardcoreRestrictions?: {
         canUseRewind?: boolean;
+        isHardcore?: boolean;
     };
 }
 
@@ -82,7 +83,10 @@ export const PlaybackControls = memo(function PlaybackControls({
                     <div className="absolute inset-0 rounded-lg animate-pulse pointer-events-none" style={{ backgroundColor: `${systemColor}20` }} />
                 )}
                 {/* Tooltips */}
-                <HardcoreTooltip show={hardcoreRestrictions?.canUseRewind === false} />
+                <HardcoreTooltip
+                    show={hardcoreRestrictions?.canUseRewind === false}
+                    message={hardcoreRestrictions?.isHardcore ? "Disabled in Hardcore mode" : "Not supported on this console"}
+                />
                 {hardcoreRestrictions?.canUseRewind !== false && !hasRewindHistory && (
                     <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
                         Play for a few seconds to enable rewind

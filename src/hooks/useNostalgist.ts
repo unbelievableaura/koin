@@ -1,9 +1,10 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { Nostalgist } from 'nostalgist';
 import {
     KeyboardMapping,
     GamepadMapping,
 } from '../lib/controls';
+import { PERFORMANCE_TIER_2_SYSTEMS } from '../lib/systems';
 import { useEmulatorCore } from './emulator/useEmulatorCore';
 import { useEmulatorAudio } from './emulator/useEmulatorAudio';
 import { useEmulatorInput } from './emulator/useEmulatorInput';
@@ -61,6 +62,7 @@ export interface UseNostalgistReturn {
     setSpeed: (multiplier: SpeedMultiplier) => void;
     startRewind: () => void;
     stopRewind: () => void;
+    rewindEnabled: boolean;
 
     // Volume
     setVolume: (volume: number) => void;
@@ -94,6 +96,12 @@ export const useNostalgist = ({
     initialVolume = 100,
     romFileName,
 }: UseNostalgistOptions): UseNostalgistReturn => {
+    // 0. System Analysis
+    // Check if system is heavy (Tier 2) to disable expensive features like manual rewind capture
+    const isHeavySystem = useMemo(() => {
+        return PERFORMANCE_TIER_2_SYSTEMS.has(system.toUpperCase());
+    }, [system]);
+
     // 1. Core Emulator Logic (Lifecycle, Status, Canvas)
     const {
         status,
@@ -164,6 +172,7 @@ export const useNostalgist = ({
         isPaused,
         setIsPaused,
         setStatus,
+        rewindEnabled: !isHeavySystem, // Disable manual rewind loop for heavy systems
     });
 
     // 5. Cheats Logic
@@ -193,7 +202,8 @@ export const useNostalgist = ({
         coreStop();
     }, [stopRewindCapture, coreStop]);
 
-    return {
+    // Memoize the return object to prevent unnecessary re-renders in parents
+    const hookReturn = useMemo((): UseNostalgistReturn => ({
         status,
         error,
         isPaused,
@@ -219,6 +229,7 @@ export const useNostalgist = ({
         setSpeed,
         startRewind,
         stopRewind,
+        rewindEnabled: !isHeavySystem,
 
         setVolume,
         toggleMute,
@@ -231,5 +242,18 @@ export const useNostalgist = ({
         resetCheats,
 
         getNostalgistInstance,
-    };
+    }), [
+        status, error, isPaused, speed, isRewinding, rewindBufferSize, volume, isMuted,
+        prepare, start, stop, restart,
+        pause, resume, togglePause,
+        saveState, saveStateWithBlob, loadState,
+        setSpeed, startRewind, stopRewind,
+        isHeavySystem,
+        setVolume, toggleMute,
+        screenshot, pressKey, resize,
+        applyCheat, resetCheats,
+        getNostalgistInstance
+    ]);
+
+    return hookReturn;
 };

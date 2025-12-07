@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef, useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { ButtonConfig } from './layouts';
 import { useTouchHandlers } from './hooks/useTouchHandlers';
 import { getButtonStyles } from './utils/buttonStyles';
@@ -23,7 +23,8 @@ export interface VirtualButtonProps {
  * Individual virtual button component
  * Handles touch events and provides visual feedback
  */
-export default function VirtualButton({
+// Memoize to prevent re-renders when other buttons are pressed
+const VirtualButton = React.memo(function VirtualButton({
   config,
   isPressed,
   onPress,
@@ -81,9 +82,13 @@ export default function VirtualButton({
     };
   }, [handleTouchStart, handleTouchMove, handleTouchEnd, handleTouchCancel, cleanup]);
 
-  // Calculate position
-  const left = (displayX / 100) * containerWidth - config.size / 2;
-  const top = (displayY / 100) * containerHeight - config.size / 2;
+  // Calculate position (percentage based)
+  const leftPercent = (displayX / 100) * containerWidth - config.size / 2;
+  const topPercent = (displayY / 100) * containerHeight - config.size / 2;
+
+  // Use transform for hardware acceleration
+  // We use translate3d to force GPU layer promotion
+  const transform = `translate3d(${leftPercent.toFixed(1)}px, ${topPercent.toFixed(1)}px, 0)`;
 
   // Get button styles
   const styles = getButtonStyles(config.type, isPressed);
@@ -110,8 +115,11 @@ export default function VirtualButton({
         active:translate-x-[3px] active:translate-y-[3px] active:shadow-none
       `}
       style={{
-        left: `${left}px`,
-        top: `${top}px`,
+        // Remove left/top and use transform instead for high performance (compositor only)
+        top: 0,
+        left: 0,
+        transform,
+        willChange: 'transform',
         width: `${config.size}px`,
         height: `${config.size}px`,
         minWidth: `${config.size}px`,
@@ -128,5 +136,7 @@ export default function VirtualButton({
       {config.label}
     </button>
   );
-}
+});
+
+export default VirtualButton;
 

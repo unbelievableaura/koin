@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, memo } from 'react';
 import GameOverlay from './Overlays/GameOverlay';
 import { EmulatorStatus } from '../hooks/emulator/types';
 import { setupCanvasResize } from '../lib/game-player-utils';
@@ -15,14 +15,14 @@ interface GameCanvasProps {
     onSelectBios?: () => void;
 }
 
-export default function GameCanvas({
+const GameCanvas = memo(function GameCanvas({
     status,
     system,
     error,
     isPaused,
     onStart,
     systemColor,
-    isFullscreen,
+    // isFullscreen, // Unused
     canvasRef,
     onSelectBios
 }: GameCanvasProps) {
@@ -77,4 +77,6 @@ export default function GameCanvas({
             />
         </div>
     );
-}
+});
+
+export default GameCanvas;

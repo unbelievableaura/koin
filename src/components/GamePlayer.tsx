@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import PlayerControls from './PlayerControls';
 import ToastContainer from './Overlays/ToastContainer';
@@ -120,89 +120,118 @@ export default function GamePlayer(props: GamePlayerProps) {
 
     const { system, systemColor = '#00FF41', cheats = [], onExit } = props;
 
+    // -- Memoized Handlers for PlayerControls --
+
+    const handlePauseToggle = useCallback(() => {
+        status === 'ready' ? start() : togglePause();
+    }, [status, start, togglePause]);
+
+    const handleScreenshot = useCallback(async () => {
+        const result = await screenshot();
+        if (result && props.onScreenshotCaptured) {
+            props.onScreenshotCaptured(result);
+        }
+    }, [screenshot, props.onScreenshotCaptured]);
+
+    const handleShowControls = useCallback(() => {
+        pause();
+        setControlsModalOpen(true);
+    }, [pause, setControlsModalOpen]);
+
+    const handleShowCheats = useCallback(() => {
+        pause();
+        setCheatsModalOpen(true);
+    }, [pause, setCheatsModalOpen]);
+
+    const handleShowRA = useCallback(() => {
+        pause();
+        setRaSidebarOpen(true);
+    }, [pause, setRaSidebarOpen]);
+
+    const handleShowGamepadSettings = useCallback(() => {
+        pause();
+        setGamepadModalOpen(true);
+    }, [pause, setGamepadModalOpen]);
+
+    const handleExitClick = useCallback(() => {
+        onExit?.();
+    }, [onExit]);
+
+    // -- Memoized SelectBios Handler for GameCanvas --
+    const handleBiosSelection = useCallback(() => {
+        setBiosModalOpen(true);
+    }, [setBiosModalOpen]);
+
     return (
         <div
             ref={containerRef}
-            className={`absolute inset-0 bg-black overflow-hidden select-none ${props.className || ''}`}
+            className={`absolute inset-0 bg-black overflow-hidden select-none flex flex-col ${props.className || ''}`}
             style={props.style}
         >
-            <GameCanvas
-                status={status}
-                system={system}
-                error={error}
-                isPaused={isPaused}
-                onStart={start}
-                systemColor={systemColor}
-                isFullscreen={isFullscreen}
-                canvasRef={canvasRef}
-                onSelectBios={props.onSelectBios ? () => setBiosModalOpen(true) : undefined}
-            />
-
-            <VirtualController
-                system={system}
-                isRunning={status === 'running' || status === 'paused'}
-                controls={controls}
-                systemColor={systemColor}
-            />
-
-            {!isFullscreen && isMobile && (
-                <FloatingFullscreenButton
-                    onClick={handleFullscreen}
-                    disabled={status === 'loading' || status === 'error'}
+            {/* Game canvas area - takes remaining space above controls */}
+            <div className="flex-1 relative min-h-0">
+                <GameCanvas
+                    status={status}
+                    system={system}
+                    error={error}
+                    isPaused={isPaused}
+                    onStart={start}
+                    systemColor={systemColor}
+                    isFullscreen={isFullscreen}
+                    canvasRef={canvasRef}
+                    onSelectBios={props.onSelectBios ? handleBiosSelection : undefined}
                 />
-            )}
 
-            {isFullscreen && isMobile && (
-                <FloatingExitButton
-                    onClick={handleFullscreen}
-                    disabled={status === 'loading' || status === 'error'}
+                <VirtualController
+                    system={system}
+                    isRunning={status === 'running' || status === 'paused'}
+                    controls={controls}
+                    systemColor={systemColor}
                 />
-            )}
 
+                {!isFullscreen && isMobile && (
+                    <FloatingFullscreenButton
+                        onClick={handleFullscreen}
+                        disabled={status === 'loading' || status === 'error'}
+                    />
+                )}
+
+                {isFullscreen && isMobile && (
+                    <FloatingExitButton
+                        onClick={handleFullscreen}
+                        disabled={status === 'loading' || status === 'error'}
+                    />
+                )}
+            </div>
+
+            {/* Controls bar - fixed height at bottom */}
             {!isFullscreen && (
-                <div className="absolute bottom-0 left-0 right-0 z-50">
+                <div className="shrink-0 z-50">
                     <PlayerControls
                         isPaused={isPaused}
                         isRunning={status === 'running' || status === 'paused'}
                         speed={speed}
                         isRewinding={isRewinding}
                         rewindBufferSize={rewindBufferSize}
-                        onPauseToggle={() => status === 'ready' ? start() : togglePause()}
+                        onPauseToggle={handlePauseToggle}
                         onRestart={restart}
                         onSave={handleSave}
                         onLoad={handleLoad}
                         onSpeedChange={setSpeed}
                         onRewindStart={startRewind}
                         onRewindStop={stopRewind}
-                        onScreenshot={async () => {
-                            const result = await screenshot();
-                            if (result && props.onScreenshotCaptured) {
-                                props.onScreenshotCaptured(result);
-                            }
-                        }}
+                        onScreenshot={handleScreenshot}
                         onFullscreen={handleFullscreen}
-                        onControls={() => {
-                            pause();
-                            setControlsModalOpen(true);
-                        }}
-                        onCheats={() => {
-                            pause();
-                            setCheatsModalOpen(true);
-                        }}
-                        onRetroAchievements={() => {
-                            pause();
-                            setRaSidebarOpen(true);
-                        }}
-                        onExit={() => onExit?.()}
+                        onControls={handleShowControls}
+                        onCheats={handleShowCheats}
+                        onRetroAchievements={handleShowRA}
+                        onExit={handleExitClick}
                         disabled={status === 'loading' || status === 'error'}
                         loadDisabled={status === 'loading' || status === 'error'}
                         saveDisabled={status === 'ready'}
                         systemColor={systemColor}
                         gamepadCount={connectedCount}
-                        onGamepadSettings={() => {
-                            pause();
-                            setGamepadModalOpen(true);
-                        }}
+                        onGamepadSettings={handleShowGamepadSettings}
                         volume={volume}
                         isMuted={isMuted}
                         onVolumeChange={setVolume}
