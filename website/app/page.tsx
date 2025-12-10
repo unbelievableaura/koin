@@ -67,11 +67,11 @@ export default function Home() {
               <div className="font-mono text-sm text-zinc-500 uppercase">Systems</div>
             </div>
             <div>
-              <div className="text-4xl font-display font-black text-retro-cyan">10</div>
+              <div className="text-4xl font-display font-black text-retro-cyan">9</div>
               <div className="font-mono text-sm text-zinc-500 uppercase">CRT Shaders</div>
             </div>
             <div>
-              <div className="text-4xl font-display font-black text-retro-pink">&lt;5KB</div>
+              <div className="text-4xl font-display font-black text-retro-pink">~55KB</div>
               <div className="font-mono text-sm text-zinc-500 uppercase">Gzipped</div>
             </div>
             <div>
@@ -97,14 +97,14 @@ export default function Home() {
           <LiveDemo />
 
           <div className="mt-6 text-center">
-            <div className="inline-flex gap-4 font-mono text-sm">
-              <span className="border-2 border-black px-3 py-1 bg-white">
+            <div className="inline-flex flex-wrap justify-center gap-2 font-mono text-xs">
+              <span className="border-4 border-black px-3 py-2 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <kbd className="font-bold">↑↓←→</kbd> Move
               </span>
-              <span className="border-2 border-black px-3 py-1 bg-white">
+              <span className="border-4 border-black px-3 py-2 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <kbd className="font-bold">X</kbd> / <kbd className="font-bold">Z</kbd> Buttons
               </span>
-              <span className="border-2 border-black px-3 py-1 bg-white">
+              <span className="border-4 border-black px-3 py-2 bg-white shadow-[3px_3px_0px_0px_rgba(0,0,0,1)]">
                 <kbd className="font-bold">Enter</kbd> Start
               </span>
             </div>
