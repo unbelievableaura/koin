@@ -36,7 +36,7 @@ export default function Home() {
 
           {/* Title */}
           <h1 className="text-6xl md:text-9xl font-display font-black uppercase tracking-tighter leading-[0.85]">
-            <span className="text-retro-green">koin</span>
+            <span className="bg-retro-green text-black px-2">koin</span>
             <span className="text-white">.js</span>
           </h1>
 
@@ -253,7 +253,7 @@ export default function App() {
       <footer className="border-t-4 border-black bg-zinc-100 py-8">
         <div className="max-w-7xl mx-auto px-4 md:px-12 flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="font-display font-black text-2xl uppercase">
-            <span className="text-retro-green drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">koin</span>.js
+            <span className="bg-retro-green text-black px-1">koin</span>.js
           </div>
           <div className="font-mono text-sm text-zinc-500 flex gap-4">
             <a href="https://www.npmjs.com/package/koin.js" target="_blank" className="hover:text-black">npm</a>

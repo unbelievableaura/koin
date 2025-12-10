@@ -6,7 +6,7 @@ export default function IntroPage() {
             {/* Hero */}
             <section>
                 <h1 className="text-4xl md:text-6xl font-display font-black uppercase mb-6">
-                    <span className="text-retro-green drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">koin</span>.js
+                    <span className="bg-retro-green text-black px-2">koin</span>.js
                 </h1>
                 <p className="text-xl font-mono leading-relaxed max-w-3xl">
                     A batteries-included React component for browser-based retro game emulation.

@@ -20,8 +20,8 @@ export function NeoSidebar() {
     return (
         <nav className="w-full md:w-64 flex-shrink-0 border-r-4 border-black min-h-screen bg-zinc-100 p-6 space-y-6">
             <Link href="/" className="block">
-                <div className="font-display font-black text-2xl mb-8 border-b-4 border-retro-green pb-2 inline-block hover:text-retro-green transition-colors">
-                    <span className="text-retro-green drop-shadow-[2px_2px_0px_rgba(0,0,0,1)]">koin</span><span className="text-black">.js</span>
+                <div className="font-display font-black text-2xl mb-8 inline-block">
+                    <span className="bg-retro-green text-black px-1">koin</span><span className="text-black">.js</span>
                 </div>
             </Link>
             <ul className="space-y-4 font-mono">
