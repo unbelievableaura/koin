@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@source "../../src";
+
+@theme {
+  --font-display: var(--font-archivo-black);
+  --font-mono: var(--font-space-mono);
+
+  --color-retro-green: #CCFF00;
+  --color-retro-pink: #FF00FF;
+  --color-retro-cyan: #00FFFF;
+}
+
+body {
+  font-family: var(--font-space-mono);
+}

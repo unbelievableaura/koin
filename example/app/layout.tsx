@@ -13,20 +13,20 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Koin Player - Next-Gen Web Retro Emulation",
-  description: "High-performance web-based emulator for NES, SNES, GBA, and more. Built by The Retro Saga.",
-  keywords: ["retro gaming", "emulator", "web assembly", "nostalgist", "nextjs", "react", "koin deck"],
+  title: "koin.js Demo — Browser Retro Game Emulation",
+  description: "Demo for koin.js — the drop-in React component for browser-based retro game emulation.",
+  keywords: ["retro gaming", "emulator", "web assembly", "nostalgist", "nextjs", "react", "koin.js"],
   openGraph: {
-    title: "Koin Player - Next-Gen Web Retro Emulation",
-    description: "Play your favorite retro games directly in the browser with high performance and save support.",
+    title: "koin.js Demo — Browser Retro Game Emulation",
+    description: "Play retro games directly in the browser with koin.js.",
     type: "website",
-    siteName: "Koin Player",
+    siteName: "koin.js",
   },
   twitter: {
     card: "summary_large_image",
     creator: "@theretrosaga",
-    title: "Koin Player",
-    description: "Next-Gen Web Retro Emulation by The Retro Saga",
+    title: "koin.js Demo",
+    description: "Browser Retro Game Emulation by The Retro Saga",
   },
 };
 

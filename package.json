@@ -1,10 +1,18 @@
 {
-    "name": "koin-deck-retro-player",
-    "version": "0.1.11",
-    "description": "The premium cloud emulation engine for Koin Deck. High-performance, preservation-focused retro gaming in the browser.",
+    "name": "koin.js",
+    "version": "1.0.0",
+    "description": "The drop-in React component for browser-based retro game emulation. 27 systems. Cloud saves. Zero backend required.",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
     "types": "dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.mjs",
+            "require": "./dist/index.js"
+        },
+        "./styles.css": "./dist/styles.css"
+    },
     "files": [
         "dist"
     ],
@@ -15,8 +23,9 @@
         "type": "git",
         "url": "https://github.com/muditjuneja/koin-deck-retro-player"
     },
+    "style": "dist/styles.css",
     "scripts": {
-        "build": "tsup",
+        "build": "tsup && tailwindcss -i ./src/styles.css -o ./dist/styles.css",
         "build:element": "tsup --config tsup.element.config.ts",
         "dev": "tsup --watch",
         "lint": "eslint src",
@@ -28,7 +37,8 @@
         "nostalgist",
         "react",
         "game",
-        "koin-deck"
+        "koin",
+        "koin.js"
     ],
     "author": "Mudit Juneja",
     "license": "MIT",

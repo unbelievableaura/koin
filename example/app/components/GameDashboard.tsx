@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { GamePlayer, Cheat, RACredentials, SHADER_PRESETS, ShaderPresetId } from 'koin-deck-retro-player';
+import { GamePlayer, Cheat, RACredentials, SHADER_PRESETS, ShaderPresetId } from 'koin.js';
 import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown, Github, FileCode, Cpu, Palette } from 'lucide-react';
 
 // Import player version from parent package.json
@@ -243,7 +243,7 @@ export default function GameDashboard() {
                 <div className="flex items-center gap-3">
                     {/* GitHub Link */}
                     <a
-                        href="https://github.com/muditjuneja/koin-deck-retro-player"
+                        href="https://github.com/user/koin.js"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="w-8 h-8 flex items-center justify-center border-2 border-black bg-white shadow-[3px_3px_0px_0px_#000] hover:translate-y-[1px] hover:shadow-[1px_1px_0px_0px_#000] transition-all"
@@ -430,7 +430,7 @@ export default function GameDashboard() {
                         <div className="space-y-1">
                             <div>
                                 <a href="https://koin.theretrosaga.com/" target="_blank" rel="noopener noreferrer" className="hover:text-black hover:underline transition-colors">
-                                    POWERED BY KOIN DECK
+                                    POWERED BY KOIN.JS
                                 </a>
                             </div>
                             <div className="text-[9px] text-gray-300">
