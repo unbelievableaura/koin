@@ -306,12 +306,15 @@ export const GamePlayer = memo(function GamePlayer(
                     onSelectBios={props.onSelectBios ? handleBiosSelection : undefined}
                 />
 
-                <VirtualController
-                    system={system}
-                    isRunning={status === 'running' || status === 'paused'}
-                    controls={controls}
-                    systemColor={systemColor}
-                />
+                {/* Virtual controller only shows in fullscreen to avoid overlaying page content */}
+                {isFullscreen && (
+                    <VirtualController
+                        system={system}
+                        isRunning={status === 'running' || status === 'paused'}
+                        controls={controls}
+                        systemColor={systemColor}
+                    />
+                )}
 
                 {!isFullscreen && isMobile && (
                     <FloatingFullscreenButton

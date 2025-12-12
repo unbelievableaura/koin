@@ -11,6 +11,7 @@ const items = [
     { name: 'Advanced Config', href: '/docs/advanced' },
     { name: 'API Reference', href: '/docs/api' },
     { name: 'System Compatibility', href: '/docs/systems' },
+    { name: 'Core Showcase', href: '/docs/showcase' },
     { name: 'Live Demo', href: '/#demo' },
 ];
 
