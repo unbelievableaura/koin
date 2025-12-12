@@ -125,7 +125,7 @@ const PlayerControls = memo(function PlayerControls({
             </MobileControlDrawer>
 
             {/* Desktop: Static bar with horizontal scroll if needed */}
-            <div className="hidden sm:flex w-full items-center justify-between gap-2 px-4 py-2 bg-black/80 backdrop-blur-sm border-t border-white/10 shrink-0 overflow-x-auto">
+            <div className="hidden sm:flex w-full items-center justify-between gap-2 px-4 py-2 bg-black backdrop-blur-sm border-t border-white/10 shrink-0 overflow-x-auto">
                 {controlsContent}
             </div>
         </>

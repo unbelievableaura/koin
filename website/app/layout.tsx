@@ -17,6 +17,9 @@ const spaceMono = Space_Mono({
 export const metadata: Metadata = {
   title: "koin.js — Browser Retro Game Emulation for React",
   description: "The drop-in React component for browser-based retro game emulation. 27 systems. Cloud saves. Zero backend required.",
+  icons: {
+    icon: "/favicon.png",
+  },
 };
 
 export default function RootLayout({
