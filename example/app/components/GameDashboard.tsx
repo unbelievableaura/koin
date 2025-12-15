@@ -24,6 +24,7 @@ const SYSTEMS = [
     { id: 'psp', name: 'PlayStation Portable', shortName: 'PSP', color: '#00B0FF', core: 'ppsspp' },
     { id: 'pcengine', name: 'PC Engine', shortName: 'PCE', color: '#FF9100', core: 'mednafen_pce_fast' },
     { id: 'neogeo', name: 'Neo Geo', shortName: 'NeoGeo', color: '#C62828', core: 'fbalpha2012_neogeo' },
+    { id: 'arcade', name: 'Arcade (FBNeo)', shortName: 'Arcade', color: '#D500F9', core: 'fbneo' },
     { id: 'atari2600', name: 'Atari 2600', shortName: '2600', color: '#E64A19', core: 'stella' },
     { id: 'c64', name: 'Commodore 64', shortName: 'C64', color: '#795548', core: 'vice_x64' },
     { id: 'dos', name: 'MS-DOS', shortName: 'DOS', color: '#607D8B', core: 'dosbox_pure' },

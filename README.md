@@ -180,7 +180,7 @@ import { en } from 'koin.js';
 | Sega Dreamcast | `DREAMCAST` | flycast |
 | Sega CD | `SEGA_CD` | genesis_plus_gx |
 | Neo Geo | `NEOGEO` | fbalpha2012_neogeo |
-| Arcade (MAME) | `ARCADE` | mame2003_plus |
+| Arcade (FBNeo) | `ARCADE` | fbneo |
 | Atari 2600 | `ATARI2600` | stella |
 | Atari 7800 | `ATARI7800` | prosystem |
 | Atari Lynx | `LYNX` | handy |

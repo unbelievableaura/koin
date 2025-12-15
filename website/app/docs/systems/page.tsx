@@ -280,9 +280,9 @@ export default function SystemsPage() {
                                 <td className="p-3 text-xs">.zip, .exe</td>
                             </tr>
                             <tr>
-                                <td className="p-3 font-bold">Arcade (MAME)</td>
+                                <td className="p-3 font-bold">Arcade (FBNeo)</td>
                                 <td className="p-3">ARCADE</td>
-                                <td className="p-3">mame2003_plus</td>
+                                <td className="p-3">fbneo</td>
                                 <td className="p-3 text-yellow-600">Varies</td>
                                 <td className="p-3 text-xs">ROM filename critical</td>
                             </tr>

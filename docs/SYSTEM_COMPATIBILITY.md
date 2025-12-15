@@ -134,7 +134,7 @@ GamePlayer ← biosUrl={undefined} ← BIOS NOT PASSED TO EMULATOR
 | **Atari 7800** | `prosystem` | ❌ Not needed | ✅ Working | |
 | **WonderSwan** | `mednafen_wswan` | ❌ Not needed | ✅ Working | |
 | **WonderSwan Color** | `mednafen_wswan` | ❌ Not needed | ✅ Working | |
-| **Arcade (MAME)** | `mame2003_plus` | ⚠️ Varies | ✅ Working | Fixed in v0.1.5 |
+| **Arcade (FBNeo)** | `fbneo` | ⚠️ Varies | ✅ Working | Switched to FBNeo for better compatibility |
 | **C64** | `vice_x64` | ❌ Not needed | 🔧 Untested | Keyboard input may be needed |
 | **DOS** | `dosbox_pure` | ❌ Not needed | 🔧 Untested | ZIP format strongly recommended |
 
