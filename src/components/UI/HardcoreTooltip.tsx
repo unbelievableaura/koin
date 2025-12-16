@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { memo } from 'react';
+import { PortalTooltip } from './PortalTooltip';
 
 interface HardcoreTooltipProps {
     show: boolean;
@@ -10,15 +11,18 @@ interface HardcoreTooltipProps {
  * Tooltip shown when a feature is disabled in Hardcore mode.
  * Wrap around a control button's parent div (which should have `group` class).
  */
-export default function HardcoreTooltip({ show, message = "Disabled in Hardcore mode", children }: HardcoreTooltipProps) {
+const HardcoreTooltip = memo(function HardcoreTooltip({ show, message = "Disabled in Hardcore mode", children }: HardcoreTooltipProps) {
     if (!show) return children ? <>{children}</> : null;
 
     return (
-        <>
+        <PortalTooltip 
+            content={message} 
+            show={show}
+            tooltipClassName="bg-amber-500/90 text-black"
+        >
             {children}
-            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-amber-500/90 text-black text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                {message}
-            </div>
-        </>
+        </PortalTooltip>
     );
-}
+});
+
+export default HardcoreTooltip;

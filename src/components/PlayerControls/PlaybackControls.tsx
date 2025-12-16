@@ -4,6 +4,7 @@ import { ControlButton } from './ControlButton';
 import SpeedMenu from '../UI/SpeedMenu';
 import VolumeControl from '../UI/VolumeControl';
 import HardcoreTooltip from '../UI/HardcoreTooltip';
+import { PortalTooltip } from '../UI/PortalTooltip';
 import { SpeedMultiplier } from '../../hooks/emulator/types';
 import { useKoinTranslation } from '../../hooks/useKoinTranslation';
 
@@ -73,7 +74,11 @@ export const PlaybackControls = memo(function PlaybackControls({
             {/* Speed Control */}
             <SpeedMenu speed={speed} onSpeedChange={onSpeedChange} disabled={disabled} />
 
-            <div className="relative group">
+            <PortalTooltip
+                content={t.common.playToEnableRewind}
+                show={hardcoreRestrictions?.canUseRewind !== false && !hasRewindHistory}
+                className="relative group"
+            >
                 <ControlButton
                     onMouseDown={hasRewindHistory && hardcoreRestrictions?.canUseRewind !== false ? onRewindStart : undefined}
                     onMouseUp={hasRewindHistory && hardcoreRestrictions?.canUseRewind !== false ? onRewindStop : undefined}
@@ -95,12 +100,7 @@ export const PlaybackControls = memo(function PlaybackControls({
                     show={hardcoreRestrictions?.canUseRewind === false}
                     message={hardcoreRestrictions?.isHardcore ? t.common.disabledInHardcore : t.common.notSupported}
                 />
-                {hardcoreRestrictions?.canUseRewind !== false && !hasRewindHistory && (
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-black/90 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50">
-                        {t.common.playToEnableRewind}
-                    </div>
-                )}
-            </div>
+            </PortalTooltip>
 
             {/* Volume Controls */}
             <div className="w-px h-8 bg-white/10 mx-1" />

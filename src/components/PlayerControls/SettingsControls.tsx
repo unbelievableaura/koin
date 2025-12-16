@@ -4,7 +4,7 @@ import { ControlButton } from './ControlButton';
 import ShaderDropdown from './ShaderDropdown';
 import RAButton from '../RASidebar/RAButton';
 import HardcoreTooltip from '../UI/HardcoreTooltip';
-import { ShaderPresetId } from '../UI/ShaderSelector';
+import { ShaderPresetId } from '../../lib/shader-presets';
 import { useKoinTranslation } from '../../hooks/useKoinTranslation';
 import { RAHardcodeRestrictions } from '../types';
 

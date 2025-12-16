@@ -1,8 +1,9 @@
 'use client';
 
 import { memo, useState, useRef, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { Monitor, ChevronDown, RefreshCw } from 'lucide-react';
-import { ShaderPresetId } from '../UI/ShaderSelector';
+import { ShaderPresetId } from '../../lib/shader-presets';
 
 interface ShaderDropdownProps {
     currentShader?: ShaderPresetId;
@@ -36,19 +37,47 @@ const ShaderDropdown = memo(function ShaderDropdown({
 }: ShaderDropdownProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [pendingShader, setPendingShader] = useState<ShaderPresetId | null>(null);
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const buttonRef = useRef<HTMLButtonElement>(null);
+    const menuRef = useRef<HTMLDivElement>(null);
+    const [dropdownPosition, setDropdownPosition] = useState({ bottom: '0px', left: '0px' });
+
+    const updateDropdownPosition = () => {
+        if (!buttonRef.current) return;
+        const rect = buttonRef.current.getBoundingClientRect();
+        setDropdownPosition({
+            bottom: `${window.innerHeight - rect.top + 8}px`,
+            left: `${rect.left}px`,
+        });
+    };
+
+    useEffect(() => {
+        if (isOpen) {
+            updateDropdownPosition();
+            window.addEventListener('resize', updateDropdownPosition);
+            window.addEventListener('scroll', updateDropdownPosition);
+            return () => {
+                window.removeEventListener('resize', updateDropdownPosition);
+                window.removeEventListener('scroll', updateDropdownPosition);
+            };
+        }
+    }, [isOpen]);
 
     // Close on outside click
     useEffect(() => {
+        if (!isOpen) return;
+        
         const handleClickOutside = (e: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-                setIsOpen(false);
-                setPendingShader(null);
+            const target = e.target as Node;
+            if (buttonRef.current?.contains(target) || menuRef.current?.contains(target)) {
+                return;
             }
+            setIsOpen(false);
+            setPendingShader(null);
         };
+        
         document.addEventListener('mousedown', handleClickOutside);
         return () => document.removeEventListener('mousedown', handleClickOutside);
-    }, []);
+    }, [isOpen]);
 
     const currentLabel = QUICK_PRESETS.find(p => p.id === currentShader)?.label || 'Custom';
 
@@ -83,8 +112,9 @@ const ShaderDropdown = memo(function ShaderDropdown({
     };
 
     return (
-        <div ref={dropdownRef} className="relative hidden sm:block">
+        <div className="relative hidden sm:block">
             <button
+                ref={buttonRef}
                 onClick={() => !disabled && setIsOpen(!isOpen)}
                 disabled={disabled}
                 className={`flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-all duration-200 hover:bg-white/10 ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
@@ -96,14 +126,18 @@ const ShaderDropdown = memo(function ShaderDropdown({
             </button>
 
             {/* Dropdown */}
-            {isOpen && (
-                <div
-                    className="absolute bottom-full left-0 mb-2 py-1 rounded-lg shadow-xl z-50 min-w-[160px]"
-                    style={{
-                        backgroundColor: 'rgba(0, 0, 0, 0.95)',
-                        border: `1px solid ${systemColor}40`,
-                    }}
-                >
+            {isOpen && typeof document !== 'undefined' && createPortal(
+                <>
+                    <div className="fixed inset-0 z-[9998]" onClick={() => setIsOpen(false)} />
+                    <div
+                        ref={menuRef}
+                        className="fixed py-1 rounded-lg shadow-xl z-[9999] min-w-[160px]"
+                        style={{
+                            backgroundColor: 'rgba(0, 0, 0, 0.95)',
+                            border: `1px solid ${systemColor}40`,
+                            ...dropdownPosition
+                        }}
+                    >
                     {/* Restart confirmation */}
                     {pendingShader !== null ? (
                         <div className="p-3 space-y-2">
@@ -145,7 +179,9 @@ const ShaderDropdown = memo(function ShaderDropdown({
                             </button>
                         ))
                     )}
-                </div>
+                    </div>
+                </>,
+                document.body
             )}
         </div>
     );

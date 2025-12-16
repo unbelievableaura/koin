@@ -1,5 +1,5 @@
 import { SpeedMultiplier } from '../hooks/useNostalgist';
-import { ShaderPresetId } from './UI/ShaderSelector';
+import { ShaderPresetId } from '../lib/shader-presets';
 // Re-export from unified controls module for backwards compatibility
 import { KeyboardMapping, DEFAULT_KEYBOARD } from '../lib/controls';
 import { RACredentials, RAGameExtended, RAAchievement } from '../lib/retroachievements';

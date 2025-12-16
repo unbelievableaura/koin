@@ -2,6 +2,7 @@
 
 import { Loader2, Trophy } from 'lucide-react';
 import { useKoinTranslation } from '../../hooks/useKoinTranslation';
+import { PortalTooltip } from '../UI/PortalTooltip';
 
 interface RAButtonProps {
   onClick: () => void;
@@ -42,7 +43,11 @@ export default function RAButton({
         : t.retroAchievements.connect;
 
   return (
-    <div className={`relative group ${className}`}>
+    <PortalTooltip 
+      content={tooltip} 
+      className={`relative group ${className}`}
+      tooltipClassName="bg-gray-900/95 text-white border border-white/10"
+    >
       <button
         onClick={onClick}
         disabled={disabled}
@@ -91,11 +96,7 @@ export default function RAButton({
         </div>
       )}
 
-      {/* Tooltip */}
-      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 bg-gray-900/95 text-white text-xs rounded whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-50 border border-white/10">
-        {tooltip}
-      </div>
-    </div>
+    </PortalTooltip>
   );
 }
 

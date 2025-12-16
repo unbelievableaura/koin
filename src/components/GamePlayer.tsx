@@ -467,7 +467,7 @@ const GamePlayerInner = memo(function GamePlayerInner(
                             onShowShortcuts={handleToggleShortcuts}
                             onRecordToggle={handleToggleRecording}
                             isRecording={isRecording}
-                            currentShader={effectiveShader as import('./UI/ShaderSelector').ShaderPresetId}
+                            currentShader={effectiveShader as import('../lib/shader-presets').ShaderPresetId}
                             onShaderChange={handleShaderChange} // Wrapped
                         />
                     </div>

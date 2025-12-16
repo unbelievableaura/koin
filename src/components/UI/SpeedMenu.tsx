@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, memo } from 'react';
+import { createPortal } from 'react-dom';
 import { Gauge } from 'lucide-react';
 import { SpeedMultiplier } from '../../hooks/emulator/types';
 
@@ -10,19 +11,49 @@ interface SpeedMenuProps {
     disabled?: boolean;
 }
 
-export default function SpeedMenu({ speed, onSpeedChange, disabled = false }: SpeedMenuProps) {
+const SpeedMenu = memo(function SpeedMenu({ speed, onSpeedChange, disabled = false }: SpeedMenuProps) {
     const [showMenu, setShowMenu] = useState(false);
     const buttonRef = React.useRef<HTMLButtonElement>(null);
+    const menuRef = React.useRef<HTMLDivElement>(null);
+    const [menuPosition, setMenuPosition] = useState({ bottom: '0px', left: '0px', transform: 'translateX(-50%)' });
 
-    const getMenuPosition = () => {
-        if (!buttonRef.current) return {};
+    const updateMenuPosition = () => {
+        if (!buttonRef.current) return;
         const rect = buttonRef.current.getBoundingClientRect();
-        return {
+        setMenuPosition({
             bottom: `${window.innerHeight - rect.top + 8}px`,
             left: `${rect.left + rect.width / 2}px`,
             transform: 'translateX(-50%)'
-        };
+        });
     };
+
+    useEffect(() => {
+        if (showMenu) {
+            updateMenuPosition();
+            window.addEventListener('resize', updateMenuPosition);
+            window.addEventListener('scroll', updateMenuPosition);
+            return () => {
+                window.removeEventListener('resize', updateMenuPosition);
+                window.removeEventListener('scroll', updateMenuPosition);
+            };
+        }
+    }, [showMenu]);
+
+    // Close on outside click
+    useEffect(() => {
+        if (!showMenu) return;
+        
+        const handleClickOutside = (e: MouseEvent) => {
+            const target = e.target as Node;
+            if (buttonRef.current?.contains(target) || menuRef.current?.contains(target)) {
+                return;
+            }
+            setShowMenu(false);
+        };
+        
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, [showMenu]);
 
     return (
         <div className="relative">
@@ -51,12 +82,13 @@ export default function SpeedMenu({ speed, onSpeedChange, disabled = false }: Sp
                 </span>
             </button>
 
-            {showMenu && (
+            {showMenu && typeof document !== 'undefined' && createPortal(
                 <>
                     <div className="fixed inset-0 z-[9998]" onClick={() => setShowMenu(false)} />
                     <div
+                        ref={menuRef}
                         className="fixed z-[9999] bg-black/90 backdrop-blur-md border border-white/20 rounded-lg p-1.5 shadow-xl flex flex-col gap-1 min-w-[80px]"
-                        style={getMenuPosition()}
+                        style={menuPosition}
                     >
                         {SPEED_OPTIONS.map((s) => (
                             <button
@@ -77,8 +109,11 @@ export default function SpeedMenu({ speed, onSpeedChange, disabled = false }: Sp
                             </button>
                         ))}
                     </div>
-                </>
+                </>,
+                document.body
             )}
         </div>
     );
-}
+});
+
+export default SpeedMenu;
