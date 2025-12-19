@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Move } from 'lucide-react';
+import { Move, Lock } from 'lucide-react';
 
 const STORAGE_KEY = 'koin-controls-hint-shown';
 
@@ -64,8 +64,12 @@ export default function ControlsHint({ isVisible }: ControlsHintProps) {
                     Customize Your Controls
                 </h3>
 
-                <p className="text-white/70 text-sm mb-4">
-                    <strong className="text-white">Long-press</strong> any button or the <strong className="text-white">D-pad center</strong> to drag and reposition it.
+                <p className="text-white/70 text-sm mb-3">
+                    Use the <Lock size={12} className="inline mx-1 text-white" /> <strong className="text-white">lock icon</strong> at the top to unlock controls for repositioning.
+                </p>
+
+                <p className="text-white/70 text-sm mb-3">
+                    When unlocked, <strong className="text-white">long-press</strong> any button or the <strong className="text-white">D-pad center</strong> to drag and reposition it.
                 </p>
 
                 <p className="text-white/50 text-xs mb-4">

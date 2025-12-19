@@ -204,19 +204,26 @@ const Dpad = React.memo(function Dpad({
         if (drag.isDragging) {
             // Handle drag movement via useDrag hook
             drag.handleDragMove(touch.clientX, touch.clientY);
+        } else if (onPositionChange) {
+            // Check if user moved significantly - try to start drag first
+            const startedDrag = drag.checkMoveThreshold(touch.clientX, touch.clientY);
+
+            if (!startedDrag) {
+                // Didn't start drag, so detect directions
+                drag.clearDragTimer();
+                const rect = dpadRef.current?.getBoundingClientRect();
+                if (rect) {
+                    updateDirections(getDirectionsFromTouch(touch.clientX, touch.clientY, rect));
+                }
+            }
         } else {
-            // Check if moved significantly - cancel drag timer
+            // No drag functionality, just detect directions
             const rect = dpadRef.current?.getBoundingClientRect();
             if (rect) {
-                // For D-pad, we cancel drag if we move to detect directions
-                // (different behavior from buttons which start dragging on move)
-                drag.clearDragTimer();
-
-                // Normal direction detection
                 updateDirections(getDirectionsFromTouch(touch.clientX, touch.clientY, rect));
             }
         }
-    }, [drag, getDirectionsFromTouch, updateDirections]);
+    }, [drag, getDirectionsFromTouch, updateDirections, onPositionChange]);
 
     const handleTouchEnd = useCallback((e: TouchEvent) => {
         e.preventDefault();

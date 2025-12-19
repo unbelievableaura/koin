@@ -53,7 +53,7 @@ export const SaveLoadControls = memo(function SaveLoadControls({
                     <AutoSaveIndicator
                         progress={autoSaveProgress}
                         state={autoSavePaused ? 'idle' : autoSaveState as AutoSaveState}
-                        intervalSeconds={20}
+                        intervalSeconds={60}
                         isPaused={autoSavePaused}
                         onClick={onAutoSaveToggle}
                     />
