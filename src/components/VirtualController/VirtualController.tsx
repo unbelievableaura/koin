@@ -16,7 +16,7 @@ import {
   createOrientationChangeHandler,
 } from './utils/viewport';
 import ControlsHint from './ControlsHint';
-import LockButton from './LockButton';
+import LayoutButton from './LayoutButton';
 import HoldButton from './HoldButton';
 import TurboButton from './TurboButton';
 import ModeOverlay from './ModeOverlay';
@@ -72,14 +72,23 @@ export default function VirtualController({
     }
   }, []);
 
-  // Toggle lock and persist
+  // Toggle lock and persist - pause game on exit (entering layout mode), resume on lock
   const toggleLock = useCallback(() => {
     setIsLocked(prev => {
       const newValue = !prev;
       localStorage.setItem(LOCK_KEY, String(newValue));
+
+      if (newValue) {
+        // Locking layout - resume game
+        onResume();
+      } else {
+        // Unlocking layout (entering layout mode) - pause game
+        onPause();
+      }
+
       return newValue;
     });
-  }, []);
+  }, [onPause, onResume]);
 
   // Toggle Hold Mode - pause game on enter, resume on exit
   const toggleHoldMode = useCallback(() => {
@@ -453,10 +462,9 @@ export default function VirtualController({
       className="fixed inset-0 z-30 pointer-events-none"
       style={{ touchAction: 'none' }}
     >
-      {/* Lock/Unlock, Hold, and Turbo buttons */}
       <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 flex gap-4">
-        <LockButton
-          isLocked={isLocked}
+        <LayoutButton
+          isActive={!isLocked}
           onToggle={toggleLock}
           systemColor={systemColor}
         />
@@ -511,19 +519,19 @@ export default function VirtualController({
             isInTurbo={turboButtons.has(buttonConfig.type)}
           />))}
 
-      {/* Mode Overlay (Hold or Turbo) */}
-      {(isHoldMode || isTurboMode) && (
+      {/* Mode Overlay (Hold, Turbo, or Layout) */}
+      {(isHoldMode || isTurboMode || !isLocked) && (
         <ModeOverlay
-          mode={isHoldMode ? 'hold' : 'turbo'}
+          mode={isHoldMode ? 'hold' : isTurboMode ? 'turbo' : 'layout'}
           heldButtons={heldButtons}
           turboButtons={turboButtons}
           systemColor={systemColor}
-          onExit={isHoldMode ? toggleHoldMode : toggleTurboMode}
+          onExit={isHoldMode ? toggleHoldMode : isTurboMode ? toggleTurboMode : toggleLock}
         />
       )}
 
       {/* First-time hint */}
-      <ControlsHint isVisible={isRunning} />
+      <ControlsHint isVisible={isRunning} systemColor={systemColor} />
     </div>
   );
 }

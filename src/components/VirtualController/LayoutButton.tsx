@@ -1,23 +1,22 @@
 'use client';
 
-import { Zap, ZapOff } from 'lucide-react';
+import { Move } from 'lucide-react';
 
-interface TurboButtonProps {
+interface LayoutButtonProps {
     isActive: boolean;
     onToggle: () => void;
     systemColor?: string;
 }
 
 /**
- * Floating button to toggle "Turbo Mode"
- * When active, holding a button rapidly fires key presses
+ * Floating button to toggle virtual control repositioning
  */
-export default function TurboButton({
+export default function LayoutButton({
     isActive,
     onToggle,
     systemColor = '#00FF41',
-}: TurboButtonProps) {
-    const Icon = isActive ? ZapOff : Zap;
+}: LayoutButtonProps) {
+    const Icon = Move;
 
     return (
         <button
@@ -27,7 +26,7 @@ export default function TurboButton({
                 backgroundColor: isActive ? 'rgba(0,0,0,0.6)' : `${systemColor}20`,
                 border: `1px solid ${isActive ? 'rgba(255,255,255,0.4)' : systemColor}`,
             }}
-            aria-label={isActive ? 'Disable Turbo Mode' : 'Enable Turbo Fire Mode'}
+            aria-label={isActive ? 'Lock controls' : 'Unlock for repositioning'}
         >
             <Icon
                 size={18}
