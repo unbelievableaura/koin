@@ -6,7 +6,7 @@ export default function SystemsPage() {
                     System Compatibility
                 </h1>
                 <p className="text-xl font-mono">
-                    27 supported systems with automatic core selection.
+                    25 supported systems with automatic core selection.
                 </p>
             </section>
 
@@ -147,14 +147,6 @@ export default function SystemsPage() {
                                 <td className="p-3 text-retro-pink font-bold">Required</td>
                                 <td className="p-3 text-retro-pink">Smooth</td>
                             </tr>
-                            <tr>
-                                <td className="p-3 font-bold">Dreamcast</td>
-                                <td className="p-3 text-retro-cyan">DREAMCAST</td>
-                                <td className="p-3">.cdi, .gdi, .chd</td>
-                                <td className="p-3">flycast</td>
-                                <td className="p-3 text-retro-pink font-bold">Required</td>
-                                <td className="p-3 text-retro-pink">Smooth</td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
@@ -252,6 +244,13 @@ export default function SystemsPage() {
                                 <td className="p-3 text-xs">.a78</td>
                             </tr>
                             <tr>
+                                <td className="p-3 font-bold">Atari 5200</td>
+                                <td className="p-3">ATARI_5200</td>
+                                <td className="p-3">a5200</td>
+                                <td className="p-3 text-retro-pink font-bold">Required</td>
+                                <td className="p-3 text-xs">5200.rom</td>
+                            </tr>
+                            <tr>
                                 <td className="p-3 font-bold">Atari Lynx</td>
                                 <td className="p-3">LYNX</td>
                                 <td className="p-3">handy</td>
@@ -271,13 +270,6 @@ export default function SystemsPage() {
                                 <td className="p-3">vice_x64</td>
                                 <td className="p-3 text-zinc-400">—</td>
                                 <td className="p-3 text-xs">.d64, .t64, .tap, .prg</td>
-                            </tr>
-                            <tr>
-                                <td className="p-3 font-bold">MS-DOS</td>
-                                <td className="p-3">DOS</td>
-                                <td className="p-3">dosbox_pure</td>
-                                <td className="p-3 text-zinc-400">—</td>
-                                <td className="p-3 text-xs">.zip, .exe</td>
                             </tr>
                             <tr>
                                 <td className="p-3 font-bold">Arcade (FBNeo)</td>
@@ -302,10 +294,6 @@ export default function SystemsPage() {
                     <div className="grid grid-cols-[120px_1fr] gap-2">
                         <span className="font-bold">Saturn:</span>
                         <span>sega_101.bin, mpr-17933.bin</span>
-                    </div>
-                    <div className="grid grid-cols-[120px_1fr] gap-2">
-                        <span className="font-bold">Dreamcast:</span>
-                        <span>dc_boot.bin, dc_flash.bin</span>
                     </div>
                     <div className="grid grid-cols-[120px_1fr] gap-2">
                         <span className="font-bold">Sega CD:</span>

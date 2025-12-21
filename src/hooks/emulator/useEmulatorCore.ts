@@ -9,6 +9,7 @@ import {
 } from '../../lib/controls';
 import { EmulatorStatus, SpeedMultiplier, RetroAchievementsConfig } from './types';
 import { getCachedRom, fetchAndCacheRom } from '../../lib/rom-cache';
+import { getSystem } from '../../lib/systems';
 
 
 interface UseEmulatorCoreProps {
@@ -219,8 +220,25 @@ export function useEmulatorCore({
             const canvasElement = getCanvasElement?.() || '';
 
 
+
+            // Resolve core URL if needed
+            // Resolve core configuration
+            const sysConfig = getSystem(system);
+            let coreOption: string | { name: string; js: string; wasm: string } = core;
+
+            if (sysConfig?.coreSource === 'linuxserver') {
+                // linuxserver/libretro-cores via jsDelivr - verified working (2025-12-22)
+                const baseUrl = `https://cdn.jsdelivr.net/gh/linuxserver/libretro-cores@master/data/${core}_libretro`;
+                // Nostalgist expects { name, js, wasm } format for custom core URLs
+                coreOption = {
+                    name: core,
+                    js: `${baseUrl}.js`,
+                    wasm: `${baseUrl}.wasm`,
+                };
+            }
+
             const prepareOptions: any = {
-                core,
+                core: coreOption,
                 rom: romOption,
                 element: canvasElement,
                 retroarchConfig: {
@@ -259,6 +277,9 @@ export function useEmulatorCore({
                 // Pass BIOS URL or object directly to Nostalgist
                 prepareOptions.bios = biosUrl;
             }
+
+            // Note: Custom resolvers are NOT needed when using { name, js, wasm } format
+            // Nostalgist will fetch the URLs directly from the core object
 
             // Handle initial state
             if (initialState) {

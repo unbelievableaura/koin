@@ -12,6 +12,7 @@ export interface SystemConfig {
 
     // Emulation
     core: string;            // RetroArch core (e.g., 'fceumm')
+    coreSource?: 'nostalgist' | 'emulatorjs' | 'linuxserver'; // Core source: nostalgist (default), emulatorjs, or linuxserver
 
     // Database matching (LaunchBox)
     dbNames: string[];       // Possible DB names to search for
@@ -28,6 +29,7 @@ export interface SystemConfig {
     biosNeeded?: boolean;
     biosFileNames?: string[]; // Expected filenames for BIOS matching
     biosLocation?: 'system' | 'rom_folder'; // Where to mount the BIOS ('system' dir or alongside 'rom_folder')
+    maxFileSizeMB?: number; // Max file size in MB (default: 100, CD-based: 700)
 }
 
 /**
@@ -45,8 +47,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'fceumm',
         dbNames: ['NES', 'Nintendo Entertainment System'],
         iconName: 'NES',
-        color: 'group-hover:text-[#FF3333]',
-        accentHex: '#FF3333',
+        color: 'group-hover:text-[#E60012]',
+        accentHex: '#E60012', // Nintendo Red
         aliases: ['NINTENDO ENTERTAINMENT SYSTEM', 'FAMICOM'],
     },
     {
@@ -58,8 +60,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'snes9x',
         dbNames: ['SNES', 'Super Nintendo Entertainment System'],
         iconName: 'SNES',
-        color: 'group-hover:text-[#AA00FF]',
-        accentHex: '#AA00FF',
+        color: 'group-hover:text-[#514689]',
+        accentHex: '#514689', // SNES Purple
         aliases: ['SUPER NINTENDO', 'SUPER NINTENDO ENTERTAINMENT SYSTEM', 'SUPER FAMICOM'],
     },
     {
@@ -69,10 +71,11 @@ export const SYSTEMS: SystemConfig[] = [
         slug: 'n64',
         extensions: ['.n64', '.z64', '.v64'],
         core: 'mupen64plus_next',
+        coreSource: 'linuxserver',
         dbNames: ['N64', 'Nintendo 64'],
         iconName: 'N64',
-        color: 'group-hover:text-[#FFD600]',
-        accentHex: '#FFD600',
+        color: 'group-hover:text-[#FFB300]',
+        accentHex: '#FFB300', // N64 Gold
         aliases: ['NINTENDO 64'],
     },
     {
@@ -84,8 +87,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'gambatte',
         dbNames: ['Nintendo Game Boy'],
         iconName: 'GB',
-        color: 'group-hover:text-[#76FF03]',
-        accentHex: '#76FF03',
+        color: 'group-hover:text-[#8BC34A]',
+        accentHex: '#8BC34A', // GB Green
         aliases: ['GAME BOY', 'GAMEBOY', 'NINTENDO GAME BOY'],
     },
     {
@@ -97,8 +100,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'gambatte',
         dbNames: ['Nintendo Game Boy Color'],
         iconName: 'GBC',
-        color: 'group-hover:text-[#F50057]',
-        accentHex: '#F50057',
+        color: 'group-hover:text-[#9C27B0]',
+        accentHex: '#9C27B0', // GBC Purple
         aliases: ['GAME BOY COLOR', 'GAMEBOY COLOR', 'NINTENDO GAME BOY COLOR'],
     },
     {
@@ -110,8 +113,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mgba',
         dbNames: ['Nintendo Game Boy Advance'],
         iconName: 'GBA',
-        color: 'group-hover:text-[#304FFE]',
-        accentHex: '#304FFE',
+        color: 'group-hover:text-[#3F51B5]',
+        accentHex: '#3F51B5', // GBA Indigo
         aliases: ['GAME BOY ADVANCE', 'GAMEBOY ADVANCE', 'NINTENDO GAME BOY ADVANCE'],
     },
     {
@@ -120,12 +123,14 @@ export const SYSTEMS: SystemConfig[] = [
         fullName: 'Nintendo DS',
         slug: 'nds',
         extensions: ['.nds'],
-        core: 'desmume',
+        core: 'melonds',
+        coreSource: 'linuxserver',
         dbNames: ['Nintendo DS'],
         iconName: 'NDS',
-        color: 'group-hover:text-[#C51162]',
-        accentHex: '#C51162',
+        color: 'group-hover:text-[#00BCD4]',
+        accentHex: '#00BCD4', // DS Cyan
         aliases: ['NDS', 'NINTENDO DS'],
+        maxFileSizeMB: 512, // DS games are 128MB-512MB
     },
     {
         key: 'VIRTUAL_BOY',
@@ -137,51 +142,39 @@ export const SYSTEMS: SystemConfig[] = [
         dbNames: ['Nintendo Virtual Boy'],
         iconName: 'VIRTUAL_BOY',
         color: 'group-hover:text-[#D50000]',
-        accentHex: '#D50000',
+        accentHex: '#D50000', // VB Red
         aliases: ['VIRTUAL BOY', 'NINTENDO VIRTUAL BOY'],
     },
 
-    {
-        key: 'DREAMCAST',
-        label: 'Sega Dreamcast',
-        fullName: 'Sega Dreamcast',
-        slug: 'dreamcast',
-        extensions: ['.cdi', '.gdi', '.chd'],
-        core: 'flycast',
-        dbNames: ['Sega Dreamcast'],
-        iconName: 'DREAMCAST', // Use existing icon or fallback
-        color: 'group-hover:text-[#FF6D00]',
-        accentHex: '#FF6D00',
-        aliases: ['DREAMCAST', 'SEGA DREAMCAST'],
-        biosNeeded: true,
-        biosFileNames: ['dc_boot.bin', 'dc_flash.bin'],
-    },
+    // Note: Dreamcast (flycast) removed - core not available in any web source
     {
         key: 'SATURN',
         label: 'Sega Saturn',
         fullName: 'Sega Saturn',
         slug: 'saturn',
-        extensions: ['.cue', '.chd', '.iso'],
-        core: 'yabasanshiro',
+        extensions: ['.cue', '.chd', '.iso', '.7z'],
+        core: 'yabause',
+        coreSource: 'linuxserver',
         dbNames: ['Sega Saturn'],
         iconName: 'SATURN',
-        color: 'group-hover:text-[#6200EA]',
-        accentHex: '#6200EA',
+        color: 'group-hover:text-[#FFA000]',
+        accentHex: '#FFA000', // Saturn Orange/Gold
         aliases: ['SATURN', 'SEGA SATURN'],
         biosNeeded: true,
         biosFileNames: ['sega_101.bin', 'mpr-17933.bin'],
+        maxFileSizeMB: 700, // CD-ROM games can be up to 700MB
     },
     {
         key: 'GENESIS',
         label: 'Sega Genesis',
         fullName: 'Sega Genesis / Mega Drive',
         slug: 'genesis',
-        extensions: ['.gen', '.md', '.smd', '.bin'],
+        extensions: ['.gen', '.md', '.smd'],
         core: 'genesis_plus_gx',
         dbNames: ['GENESIS', 'Sega Genesis', 'Sega Mega Drive'],
         iconName: 'GENESIS',
-        color: 'group-hover:text-[#2979FF]',
-        accentHex: '#2979FF',
+        color: 'group-hover:text-[#0060A9]',
+        accentHex: '#0060A9', // Genesis Blue
         aliases: ['SEGA GENESIS', 'MEGA DRIVE', 'SEGA MEGA DRIVE', 'MEGADRIVE'],
         biosNeeded: true, // For Sega CD
         biosFileNames: ['bios_CD_U.bin', 'bios_CD_E.bin', 'bios_CD_J.bin'],
@@ -195,8 +188,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'gearsystem',
         dbNames: ['Sega Master System'],
         iconName: 'MASTER_SYSTEM',
-        color: 'group-hover:text-[#FF3D00]',
-        accentHex: '#FF3D00',
+        color: 'group-hover:text-[#00897B]',
+        accentHex: '#00897B', // SMS Teal
         aliases: ['MASTER SYSTEM', 'SEGA MASTER SYSTEM', 'SMS'],
     },
     {
@@ -208,8 +201,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'gearsystem',
         dbNames: ['Sega Game Gear'],
         iconName: 'GAME_GEAR',
-        color: 'group-hover:text-[#1DE9B6]',
-        accentHex: '#1DE9B6',
+        color: 'group-hover:text-[#1976D2]',
+        accentHex: '#1976D2', // GG Blue
         aliases: ['GAME GEAR', 'SEGA GAME GEAR', 'GG'],
     },
 
@@ -223,24 +216,12 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'pcsx_rearmed',
         dbNames: ['PLAYSTATION', 'Sony Playstation', 'Sony PlayStation'],
         iconName: 'PS1',
-        color: 'group-hover:text-[#448AFF]',
-        accentHex: '#448AFF',
+        color: 'group-hover:text-[#283593]',
+        accentHex: '#283593', // PS1 Dark Blue
         aliases: ['PLAYSTATION', 'PSX', 'PS', 'SONY PLAYSTATION'],
         biosNeeded: true,
         biosFileNames: ['scph5500.bin', 'scph5501.bin', 'scph5502.bin', 'scph1001.bin'],
-    },
-    {
-        key: 'PSP',
-        label: 'PlayStation Portable',
-        fullName: 'Sony PlayStation Portable',
-        slug: 'psp',
-        extensions: ['.iso', '.cso'],
-        core: 'ppsspp',
-        dbNames: ['Sony PSP', 'PSP'],
-        iconName: 'PSP',
-        color: 'group-hover:text-[#00B0FF]',
-        accentHex: '#00B0FF',
-        aliases: ['PSP', 'PLAYSTATION PORTABLE'],
+        maxFileSizeMB: 700, // CD-ROM games can be up to 700MB
     },
 
     // ============ NEC ============
@@ -253,8 +234,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mednafen_pce_fast',
         dbNames: ['PC Engine', 'TurboGrafx-16', 'NEC PC Engine', 'NEC TurboGrafx-16'],
         iconName: 'PC_ENGINE',
-        color: 'group-hover:text-[#FF9100]',
-        accentHex: '#FF9100',
+        color: 'group-hover:text-[#F57C00]',
+        accentHex: '#F57C00', // PCE Orange
         aliases: ['PC ENGINE', 'TURBOGRAFX-16', 'TURBOGRAFX', 'PCE', 'TG16'],
         biosNeeded: true, // For CD games
         biosFileNames: ['syscard3.pce'],
@@ -271,7 +252,7 @@ export const SYSTEMS: SystemConfig[] = [
         dbNames: ['SNK Neo Geo MVS', 'SNK Neo Geo AES', 'SNK Neo Geo CD', 'Neo Geo'],
         iconName: 'NEOGEO',
         color: 'group-hover:text-[#C62828]',
-        accentHex: '#C62828',
+        accentHex: '#C62828', // Neo Geo Red
         aliases: ['NEO GEO', 'NEO-GEO', 'SNK NEO GEO'],
         biosNeeded: true,
         biosFileNames: ['neogeo.zip'],
@@ -286,8 +267,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mednafen_ngp',
         dbNames: ['SNK Neo Geo Pocket'],
         iconName: 'NEOGEO_POCKET',
-        color: 'group-hover:text-[#00B0FF]',
-        accentHex: '#00B0FF',
+        color: 'group-hover:text-[#0277BD]',
+        accentHex: '#0277BD', // NGP Blue
         aliases: ['NEO GEO POCKET', 'NGP'],
     },
     {
@@ -299,8 +280,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mednafen_ngp',
         dbNames: ['SNK Neo Geo Pocket Color'],
         iconName: 'NEOGEO_POCKET',
-        color: 'group-hover:text-[#FF4081]',
-        accentHex: '#FF4081',
+        color: 'group-hover:text-[#AD1457]',
+        accentHex: '#AD1457', // NGPC Pink
         aliases: ['NEO GEO POCKET COLOR', 'NGPC'],
     },
 
@@ -310,15 +291,31 @@ export const SYSTEMS: SystemConfig[] = [
         label: 'Atari Lynx',
         fullName: 'Atari Lynx',
         slug: 'lynx',
-        extensions: ['.lnx'],
+        extensions: ['.lnx', '.lyx'],
         core: 'handy',
         dbNames: ['Atari Lynx'],
         iconName: 'LYNX',
-        color: 'group-hover:text-[#FFC400]',
-        accentHex: '#FFC400',
+        color: 'group-hover:text-[#FBC02D]',
+        accentHex: '#FBC02D', // Lynx Yellow
         aliases: ['ATARI LYNX'],
         biosNeeded: true,
         biosFileNames: ['lynxboot.img'],
+    },
+    {
+        key: 'ATARI_5200',
+        label: 'Atari 5200',
+        fullName: 'Atari 5200',
+        slug: 'atari5200',
+        extensions: ['.a52'],
+        core: 'atari800', // Note: a5200 core not available, using atari800 which supports 5200
+        coreSource: 'linuxserver',
+        dbNames: ['Atari 5200'],
+        iconName: 'ATARI_5200', // Assuming we can reuse a generic icon or this exists. If not, will default or fail gracefully.
+        color: 'group-hover:text-[#E65100]',
+        accentHex: '#E65100', // 5200 Orange
+        aliases: ['ATARI 5200', 'ATARI5200'],
+        biosNeeded: true,
+        biosFileNames: ['5200.rom'],
     },
     {
         key: 'ATARI_2600',
@@ -326,11 +323,12 @@ export const SYSTEMS: SystemConfig[] = [
         fullName: 'Atari 2600',
         slug: 'atari2600',
         extensions: ['.a26'],
-        core: 'stella',
+        core: 'stella2014',
+        coreSource: 'linuxserver',
         dbNames: ['Atari 2600'],
         iconName: 'ATARI_2600',
-        color: 'group-hover:text-[#E64A19]',
-        accentHex: '#E64A19',
+        color: 'group-hover:text-[#D84315]',
+        accentHex: '#D84315', // 2600 Red-Orange
         aliases: ['ATARI 2600', 'ATARI2600'],
     },
     {
@@ -340,10 +338,11 @@ export const SYSTEMS: SystemConfig[] = [
         slug: 'atari7800',
         extensions: ['.a78'],
         core: 'prosystem',
+        coreSource: 'linuxserver',
         dbNames: ['Atari 7800'],
         iconName: 'ATARI_7800',
-        color: 'group-hover:text-[#BF360C]',
-        accentHex: '#BF360C',
+        color: 'group-hover:text-[#5D4037]',
+        accentHex: '#5D4037', // 7800 Brown
         aliases: ['ATARI 7800', 'ATARI7800'],
     },
 
@@ -357,8 +356,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mednafen_wswan',
         dbNames: ['Bandai WonderSwan'],
         iconName: 'WONDERSWAN',
-        color: 'group-hover:text-[#00E5FF]',
-        accentHex: '#00E5FF',
+        color: 'group-hover:text-[#7CB342]',
+        accentHex: '#7CB342', // WS Green
         aliases: ['WONDERSWAN', 'WONDER SWAN', 'BANDAI WONDERSWAN'],
     },
     {
@@ -370,8 +369,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'mednafen_wswan',
         dbNames: ['Bandai WonderSwan Color'],
         iconName: 'WONDERSWAN',
-        color: 'group-hover:text-[#00BCD4]',
-        accentHex: '#00BCD4',
+        color: 'group-hover:text-[#009688]',
+        accentHex: '#009688', // WSC Teal
         aliases: ['WONDERSWAN COLOR', 'WONDER SWAN COLOR', 'BANDAI WONDERSWAN COLOR', 'WSC'],
     },
     {
@@ -383,8 +382,8 @@ export const SYSTEMS: SystemConfig[] = [
         core: 'fbneo',
         dbNames: ['Arcade', 'MAME', 'FBNeo', 'FinalBurn Neo'],
         iconName: 'ARCADE',
-        color: 'group-hover:text-[#D500F9]',
-        accentHex: '#D500F9',
+        color: 'group-hover:text-[#E91E63]',
+        accentHex: '#E91E63', // Arcade Neon Pink
         aliases: ['MAME', 'CPS1', 'CPS2', 'CPS3', 'FBNEO', 'FINALBURN', 'SYSTEM16', 'SEGA SYSTEM 16'],
         biosNeeded: true,
     },
@@ -393,25 +392,12 @@ export const SYSTEMS: SystemConfig[] = [
         label: 'Commodore 64',
         fullName: 'Commodore 64',
         slug: 'c64',
-        extensions: ['.d64', '.t64', '.tap', '.prg'],
+        extensions: ['.d64', '.t64', '.tap', '.prg', '.crt'],
         core: 'vice_x64',
         dbNames: ['Commodore 64'],
         iconName: 'C64',
-        color: 'group-hover:text-[#795548]',
-        accentHex: '#795548',
+        color: 'group-hover:text-[#546E7A]',
+        accentHex: '#546E7A', // C64 Blue-Grey
         aliases: ['C64', 'COMMODORE 64'],
-    },
-    {
-        key: 'DOS',
-        label: 'MS-DOS',
-        fullName: 'MS-DOS',
-        slug: 'dos',
-        extensions: ['.zip', '.exe', '.com', '.bat'],
-        core: 'dosbox_pure',
-        dbNames: ['MS-DOS', 'F-DOS', 'DOS'],
-        iconName: 'DOS',
-        color: 'group-hover:text-[#607D8B]',
-        accentHex: '#607D8B',
-        aliases: ['DOS', 'MSDOS', 'MS-DOS'],
     },
 ];

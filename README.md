@@ -2,7 +2,7 @@
 
 ## Browser Retro Game Emulation for React
 
-> **28 systems. Cloud saves. Multi-language. Zero backend required.**
+> **24 systems. Cloud saves. Multi-language. Zero backend required.**
 
 [![Try the Demo](https://img.shields.io/badge/PLAY-TRY%20THE%20DEMO-FFD600?style=for-the-badge&logoColor=black&labelColor=black)](https://koin.js.org/)
 [![NPM Version](https://img.shields.io/npm/v/koin.js?style=for-the-badge&color=white&labelColor=black)](https://www.npmjs.com/package/koin.js)
@@ -15,7 +15,7 @@ The drop-in React component for browser-based retro game emulation. Built on [No
 ## Features
 
 ### 🎮 Core Emulation
-- **28 Consoles** — NES to PlayStation, Game Boy to Dreamcast
+- **25 Consoles** — NES to PlayStation, Game Boy to Saturn
 - **Automatic Core Selection** — Best emulator core per system
 - **BIOS Management** — Multi-file BIOS support with UI selection
 - **Performance Optimized** — SharedArrayBuffer for maximum speed
@@ -163,33 +163,32 @@ import { en } from 'koin.js';
 
 ## Supported Systems
 
-| System | Key | Core |
-|--------|-----|------|
-| NES / Famicom | `NES` | fceumm |
-| Super Nintendo | `SNES` | snes9x |
-| Nintendo 64 | `N64` | mupen64plus_next |
-| Game Boy / Color | `GB`, `GBC` | gambatte |
-| Game Boy Advance | `GBA` | mgba |
-| Nintendo DS | `NDS` | desmume |
-| PlayStation | `PS1` | pcsx_rearmed |
-| PSP | `PSP` | ppsspp |
-| Sega Genesis / Mega Drive | `GENESIS` | genesis_plus_gx |
-| Sega Master System | `MASTER_SYSTEM` | gearsystem |
-| Game Gear | `GAME_GEAR` | gearsystem |
-| Sega Saturn | `SATURN` | yabasanshiro |
-| Sega Dreamcast | `DREAMCAST` | flycast |
-| Sega CD | `SEGA_CD` | genesis_plus_gx |
-| Neo Geo | `NEOGEO` | fbalpha2012_neogeo |
-| Arcade (FBNeo) | `ARCADE` | fbneo |
-| Atari 2600 | `ATARI2600` | stella |
-| Atari 7800 | `ATARI7800` | prosystem |
-| Atari Lynx | `LYNX` | handy |
-| PC Engine / TurboGrafx-16 | `PCE` | mednafen_pce |
-| WonderSwan / Color | `WS`, `WSC` | mednafen_wswan |
-| Virtual Boy | `VB` | mednafen_vb |
-| Vectrex | `VECTREX` | vecx |
-| Commodore 64 | `C64` | vice_x64 |
-| DOS | `DOS` | dosbox_pure |
+| System | Key | Core | Source |
+|--------|-----|------|--------|
+| NES / Famicom | `NES` | fceumm | Nostalgist |
+| Super Nintendo | `SNES` | snes9x | Nostalgist |
+| Nintendo 64 | `N64` | mupen64plus_next | BinBashBanana |
+| Game Boy / Color | `GB`, `GBC` | gambatte | Nostalgist |
+| Game Boy Advance | `GBA` | mgba | Nostalgist |
+| Nintendo DS | `NDS` | melonds | BinBashBanana |
+| PlayStation | `PS1` | pcsx_rearmed | Nostalgist |
+| Sega Genesis / Mega Drive | `GENESIS` | genesis_plus_gx | Nostalgist |
+| Sega Master System | `MASTER_SYSTEM` | gearsystem | Nostalgist |
+| Game Gear | `GAME_GEAR` | gearsystem | Nostalgist |
+| Sega Saturn | `SATURN` | yabause | BinBashBanana |
+| Neo Geo | `NEOGEO` | fbalpha2012_neogeo | Nostalgist |
+| Arcade (FBNeo) | `ARCADE` | fbneo | Nostalgist |
+| Atari 2600 | `ATARI_2600` | stella2014 | BinBashBanana |
+| Atari 5200 | `ATARI_5200` | a5200 | BinBashBanana |
+| Atari 7800 | `ATARI_7800` | prosystem | BinBashBanana |
+| Atari Lynx | `LYNX` | handy | Nostalgist |
+| PC Engine / TurboGrafx-16 | `PC_ENGINE` | mednafen_pce_fast | Nostalgist |
+| WonderSwan / Color | `WONDERSWAN`, `WONDERSWAN_COLOR` | mednafen_wswan | Nostalgist |
+| Virtual Boy | `VIRTUAL_BOY` | mednafen_vb | Nostalgist |
+| Neo Geo Pocket / Color | `NEOGEO_POCKET`, `NEOGEO_POCKET_COLOR` | mednafen_ngp | Nostalgist |
+| Commodore 64 | `C64` | vice_x64 | Nostalgist |
+
+> **Note:** Systems marked **BinBashBanana** use cores from [BinBashBanana/webretro](https://github.com/BinBashBanana/webretro) via jsDelivr. Dreamcast and PSP are currently unavailable due to lack of compatible WASM cores.
 
 [Full system details →](https://koin.js.org/docs/systems)
 

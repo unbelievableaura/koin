@@ -96,6 +96,15 @@ export function getCore(systemName: string): string {
 }
 
 /**
+ * Get the core source for a system (nostalgist or emulatorjs)
+ * Returns undefined if using default (nostalgist)
+ */
+export function getCoreSource(systemName: string): 'nostalgist' | 'emulatorjs' | 'linuxserver' | undefined {
+    const sys = getSystem(systemName);
+    return sys?.coreSource;
+}
+
+/**
  * Get DB names for matching (used in game search)
  */
 export function getDBSystemNames(systemKey: string): string[] {
@@ -163,6 +172,14 @@ export function systemsMatch(name1: string, name2: string): boolean {
 export function normalizeSystemKey(name: string): string {
     const sys = getSystem(name);
     return sys?.key ?? name;
+}
+
+/**
+ * Get max file size in MB for a system (default: 100MB, CD-based: 700MB)
+ */
+export function getMaxFileSizeMB(systemName: string): number {
+    const sys = getSystem(systemName);
+    return sys?.maxFileSizeMB ?? 100;
 }
 
 // Legacy export names for backward compatibility

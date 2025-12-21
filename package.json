@@ -1,6 +1,6 @@
 {
     "name": "koin.js",
-    "version": "1.1.4",
+    "version": "1.2.0",
     "description": "The drop-in React component for browser-based retro game emulation. 28 systems. Cloud saves. Zero backend required.",
     "main": "dist/index.js",
     "module": "dist/index.mjs",
@@ -10,6 +10,11 @@
             "types": "./dist/index.d.ts",
             "import": "./dist/index.mjs",
             "require": "./dist/index.js"
+        },
+        "./systems": {
+            "types": "./dist/systems.d.ts",
+            "import": "./dist/systems.mjs",
+            "require": "./dist/systems.js"
         },
         "./styles.css": "./dist/styles.css"
     },
