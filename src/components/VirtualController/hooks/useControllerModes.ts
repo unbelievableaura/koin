@@ -113,8 +113,8 @@ export const useControllerModes = ({
                         if (holdPrev.has(buttonType)) {
                             const nextHold = new Set(holdPrev);
                             nextHold.delete(buttonType);
-                            // Also physical release
-                            onButtonUp(buttonType);
+                            // Schedule physical release AFTER state updates complete
+                            setTimeout(() => onButtonUp(buttonType), 0);
                             return nextHold;
                         }
                         return holdPrev;

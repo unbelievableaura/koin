@@ -62,9 +62,9 @@ export function usePlayerPersistence(
                 console.error('Failed to save player settings', e);
             }
 
-            // Notify
+            // Schedule callback AFTER state update completes
             if (onSettingsChange) {
-                onSettingsChange(next);
+                setTimeout(() => onSettingsChange(next), 0);
             }
 
             return next;
