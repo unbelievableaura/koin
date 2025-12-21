@@ -1,0 +1,76 @@
+name: Publish to npm
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'package.json'  # Only run when package.json changes
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write  # Required for npm provenance
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Get package info
+        id: package
+        run: |
+          PACKAGE_NAME=$(node -p "require('./package.json').name")
+          LOCAL_VERSION=$(node -p "require('./package.json').version")
+          echo "name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
+          echo "local_version=$LOCAL_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Check published version
+        id: npm
+        run: |
+          PUBLISHED_VERSION=$(npm view ${{ steps.package.outputs.name }} version 2>/dev/null || echo "0.0.0")
+          echo "published_version=$PUBLISHED_VERSION" >> $GITHUB_OUTPUT
+
+      - name: Compare versions
+        id: compare
+        run: |
+          LOCAL="${{ steps.package.outputs.local_version }}"
+          PUBLISHED="${{ steps.npm.outputs.published_version }}"
+          echo "Local version: $LOCAL"
+          echo "Published version: $PUBLISHED"
+          if [ "$LOCAL" != "$PUBLISHED" ]; then
+            echo "should_publish=true" >> $GITHUB_OUTPUT
+            echo "✅ New version detected! Will publish $LOCAL"
+          else
+            echo "should_publish=false" >> $GITHUB_OUTPUT
+            echo "⏭️ Version unchanged, skipping publish"
+          fi
+
+      - name: Install dependencies
+        if: steps.compare.outputs.should_publish == 'true'
+        run: npm ci
+
+      - name: Build library
+        if: steps.compare.outputs.should_publish == 'true'
+        run: npm run build
+
+      - name: Publish to npm
+        if: steps.compare.outputs.should_publish == 'true'
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Summary
+        run: |
+          if [ "${{ steps.compare.outputs.should_publish }}" == "true" ]; then
+            echo "🎉 Published ${{ steps.package.outputs.name }}@${{ steps.package.outputs.local_version }} to npm!" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⏭️ No publish needed. ${{ steps.package.outputs.name }}@${{ steps.package.outputs.local_version }} already exists on npm." >> $GITHUB_STEP_SUMMARY
+          fi
