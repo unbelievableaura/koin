@@ -28,12 +28,13 @@ export const useControllerModes = ({
     // Toggle Hold Mode
     const toggleHoldMode = useCallback(() => {
         setIsHoldMode(prev => {
+            // Schedule side effects AFTER state update completes
             if (prev) {
-                // Exiting hold mode
-                onResume();
+                // Will be exiting hold mode - resume
+                setTimeout(() => onResume(), 0);
             } else {
-                // Entering hold mode
-                onPause();
+                // Will be entering hold mode - pause
+                setTimeout(() => onPause(), 0);
             }
             return !prev;
         });
@@ -42,12 +43,13 @@ export const useControllerModes = ({
     // Toggle Turbo Mode
     const toggleTurboMode = useCallback(() => {
         setIsTurboMode(prev => {
+            // Schedule side effects AFTER state update completes
             if (prev) {
-                // Exiting turbo mode
-                onResume();
+                // Will be exiting turbo mode - resume
+                setTimeout(() => onResume(), 0);
             } else {
-                // Entering turbo mode
-                onPause();
+                // Will be entering turbo mode - pause
+                setTimeout(() => onPause(), 0);
             }
             return !prev;
         });

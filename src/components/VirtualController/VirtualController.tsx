@@ -16,9 +16,7 @@ import {
   createOrientationChangeHandler,
 } from './utils/viewport';
 import ControlsHint from './ControlsHint';
-import LayoutButton from './LayoutButton';
-import HoldButton from './HoldButton';
-import TurboButton from './TurboButton';
+import UtilsFAB from './UtilsFAB';
 import ModeOverlay from './ModeOverlay';
 import OrientationOverlay from './OrientationOverlay';
 import { useControllerModes } from './hooks/useControllerModes';
@@ -383,23 +381,15 @@ export default function VirtualController({
       className="fixed inset-0 z-30 pointer-events-none"
       style={{ touchAction: 'none' }}
     >
-      <div className="fixed top-4 left-1/2 -translate-x-1/2 z-40 flex gap-4">
-        <LayoutButton
-          isActive={!isLocked}
-          onToggle={toggleLock}
-          systemColor={systemColor}
-        />
-        <HoldButton
-          isActive={isHoldMode}
-          onToggle={toggleHoldMode}
-          systemColor={systemColor}
-        />
-        <TurboButton
-          isActive={isTurboMode}
-          onToggle={toggleTurboMode}
-          systemColor={systemColor}
-        />
-      </div>
+      <UtilsFAB
+        isLayoutActive={!isLocked}
+        isHoldActive={isHoldMode}
+        isTurboActive={isTurboMode}
+        onLayoutToggle={toggleLock}
+        onHoldToggle={toggleHoldMode}
+        onTurboToggle={toggleTurboMode}
+        systemColor={systemColor}
+      />
 
       {/* Unified D-pad */}
       <Dpad

@@ -285,8 +285,12 @@ const GamePlayerInner = memo(function GamePlayerInner(
     // Shortcuts Modal Toggle (F1) - pauses game when opening, resumes when closing
     const handleToggleShortcuts = useCallback(() => {
         setShowShortcutsModal(prev => {
-            if (!prev) pause();
-            else resume();
+            // Schedule side effects AFTER state update completes
+            if (!prev) {
+                setTimeout(() => pause(), 0);
+            } else {
+                setTimeout(() => resume(), 0);
+            }
             return !prev;
         });
     }, [pause, resume]);
