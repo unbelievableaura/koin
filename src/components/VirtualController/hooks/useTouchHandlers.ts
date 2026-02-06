@@ -75,15 +75,16 @@ export function useTouchHandlers({
       e.preventDefault();
       e.stopPropagation();
 
-      // Haptic feedback for tactile response
-      if (hapticsEnabled && navigator.vibrate) {
-        navigator.vibrate(8); // Very short 8ms pulse
-      }
-
+      // Dispatch input FIRST for minimum latency
       if (isSystemButton) {
         onPress(buttonType);
       } else if (onPressDown) {
         onPressDown(buttonType);
+      }
+
+      // Haptic feedback AFTER input dispatch (async for extra safety)
+      if (hapticsEnabled && navigator.vibrate) {
+        queueMicrotask(() => navigator.vibrate(8));
       }
 
       // Setup drag detection if enabled
@@ -94,8 +95,9 @@ export function useTouchHandlers({
         drag.checkDragStart(touch.clientX, touch.clientY, rect);
       }
     },
-    [isSystemButton, buttonType, onPress, onPressDown, onPositionChange, drag]
+    [isSystemButton, buttonType, onPress, onPressDown, onPositionChange, drag, hapticsEnabled]
   );
+
 
   const handleTouchMove = useCallback(
     (e: TouchEvent) => {
