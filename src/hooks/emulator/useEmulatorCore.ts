@@ -140,6 +140,7 @@ export function useEmulatorCore({
                         video_threaded: true,         // Offload to prevent UI blocking
                         audio_latency: 96,            // Larger buffer prevents audio crackle
                         rewind_enable: false,         // Save RAM - savestate buffer is expensive
+                        video_max_swapchain_images: 3, // Smoother frame delivery on mobile
                     };
                 } else {
                     console.warn('[Nostalgist] SharedArrayBuffer not available. Falling back to main-thread rendering for heavy system.');
@@ -148,6 +149,7 @@ export function useEmulatorCore({
                         video_threaded: false,        // Fallback: Main thread (might stutter)
                         audio_latency: 128,           // Increase latency further to handle main thread blocking
                         rewind_enable: false,
+                        video_max_swapchain_images: 3, // Smoother frame delivery on mobile
                     };
                 }
             }
@@ -270,6 +272,10 @@ export function useEmulatorCore({
                         cheevos_verbose_enable: true,
                     } : {}),
                 } as Record<string, unknown>,
+                // Core-specific options (e.g., FBNeo CPU clock)
+                retroarchCoreConfig: system.toUpperCase() === 'ARCADE' ? {
+                    'fbneo_cpu_speed_adjust': '150',  // 150% CPU clock reduces slowdowns on mobile
+                } : {},
             };
 
             // Handle BIOS
