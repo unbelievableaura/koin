@@ -1,9 +1,10 @@
-import { useState, useMemo, useEffect, RefObject } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef, RefObject } from 'react';
 import { useNostalgist } from './useNostalgist';
 import { useKoinTranslation } from './useKoinTranslation';
 import { useGamepad } from './useGamepad';
 import { useVolume } from './useVolume';
 import { useControls } from './useControls';
+import { loadAllGamepadMappings } from '../lib/controls';
 import { suppressEmulatorWarnings } from '../lib/game-player-utils';
 import { GamePlayerProps } from '../components/types';
 
@@ -67,12 +68,17 @@ export function useGameSession(props: UseGameSessionProps) {
         },
     });
 
-    // Load gamepad bindings
+    // Load gamepad bindings — counter triggers reload after remapping
+    const [gamepadBindingsVersion, setGamepadBindingsVersion] = useState(0);
     const gamepadBindings = useMemo(() => {
-        // We need to implement loadGamepadMapping in useControls or similar
-        // For now, passing empty array or implementing a simple loader
-        return [];
-    }, [gamepads.length]);
+        const playerCount = Math.max(gamepads.length, 1);
+        return loadAllGamepadMappings(playerCount);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [gamepads.length, gamepadBindingsVersion]);
+
+    // Soft restart state — logic defined after nostalgist hook below
+    const savedStateForRestart = useRef<Uint8Array | null>(null);
+    const [softRestartPending, setSoftRestartPending] = useState(false);
 
     // Emulator state
     const nostalgist = useNostalgist({
@@ -155,6 +161,53 @@ export function useGameSession(props: UseGameSessionProps) {
         return () => cancelAnimationFrame(rafId);
     }, [romUrl, system, status, prepare]);
 
+    // Soft restart: reload gamepad bindings and seamlessly restart emulator
+    const reloadGamepadBindings = useCallback(async () => {
+        const isRunning = status === 'running' || status === 'paused';
+
+        if (isRunning) {
+            // Save current state before restart
+            const stateData = await nostalgist.saveState();
+            savedStateForRestart.current = stateData ?? null;
+        }
+
+        // Bump version → next render recomputes gamepadBindings → prepare gets new config
+        setGamepadBindingsVersion(v => v + 1);
+
+        if (isRunning) {
+            setSoftRestartPending(true);
+        }
+    }, [status, nostalgist]);
+
+    // Effect: runs after React renders with updated bindings → performs the actual restart
+    useEffect(() => {
+        if (!softRestartPending) return;
+        setSoftRestartPending(false);
+
+        const doSoftRestart = async () => {
+            try {
+                showToast(t.notifications.controlsSaved, 'info', { duration: 2000 });
+
+                await nostalgist.restart();
+
+                // Wait for the emulator to fully initialize and render first frames
+                await new Promise(resolve => setTimeout(resolve, 500));
+
+                // Restore saved state so the user picks up where they left off
+                const saved = savedStateForRestart.current;
+                if (saved) {
+                    await nostalgist.loadState(saved);
+                    savedStateForRestart.current = null;
+                }
+            } catch (err) {
+                console.error('[GameSession] Soft restart failed:', err);
+            }
+        };
+
+        doSoftRestart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [softRestartPending]);
+
     // Hardcore Restrictions
     const hardcoreRestrictions = useMemo(() => {
         const isHardcore = !!retroAchievementsConfig?.hardcore;
@@ -179,5 +232,6 @@ export function useGameSession(props: UseGameSessionProps) {
         controlsModalOpen,
         setControlsModalOpen,
         hardcoreRestrictions,
+        reloadGamepadBindings,
     };
 }

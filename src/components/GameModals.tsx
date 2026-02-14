@@ -19,6 +19,7 @@ interface GameModalsProps {
     setGamepadModalOpen: (open: boolean) => void;
     gamepads: any[]; // Using any[] for now as Gamepad type might be complex or standard
     systemColor: string;
+    onGamepadSave?: () => void;
 
     cheatsModalOpen: boolean;
     setCheatsModalOpen: (open: boolean) => void;
@@ -68,6 +69,7 @@ export default function GameModals({
     setGamepadModalOpen,
     gamepads,
     systemColor,
+    onGamepadSave,
 
     cheatsModalOpen,
     setCheatsModalOpen,
@@ -121,6 +123,7 @@ export default function GameModals({
                     setGamepadModalOpen(false);
                     onResume();
                 }}
+                onSave={() => onGamepadSave?.()}
                 systemColor={systemColor}
             />
 

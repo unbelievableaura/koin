@@ -76,6 +76,7 @@ const GamePlayerInner = memo(function GamePlayerInner(
         // Gamepads
         gamepads,
         connectedCount,
+        reloadGamepadBindings,
 
         // Modals
         gamepadModalOpen,
@@ -513,6 +514,7 @@ const GamePlayerInner = memo(function GamePlayerInner(
                     setGamepadModalOpen={setGamepadModalOpen}
                     gamepads={gamepads}
                     systemColor={systemColor}
+                    onGamepadSave={reloadGamepadBindings}
 
                     cheatsModalOpen={cheatsModalOpen}
                     setCheatsModalOpen={setCheatsModalOpen}

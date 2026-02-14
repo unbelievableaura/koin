@@ -33,6 +33,7 @@ export function useGamePlayer(props: GamePlayerProps) {
         controlsModalOpen,
         setControlsModalOpen,
         hardcoreRestrictions,
+        reloadGamepadBindings,
     } = useGameSession({
         ...props,
         canvasRef,
@@ -117,6 +118,7 @@ export function useGamePlayer(props: GamePlayerProps) {
         // Gamepads
         gamepads,
         connectedCount,
+        reloadGamepadBindings,
 
         // Modals
         gamepadModalOpen,

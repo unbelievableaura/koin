@@ -248,6 +248,7 @@ export function useEmulatorCore({
                     rgui_show_start_screen: false,
                     video_font_enable: false,
                     input_menu_toggle_gamepad_combo: 0,
+                    input_autodetect_enable: false, // Disable autoconfig so custom gamepad mappings aren't overridden
                     rewind_enable: true, // Default, can be overridden by optimizedConfig
                     rewind_granularity: 1,
                     rewind_buffer_size: 100,
@@ -370,7 +371,7 @@ export function useEmulatorCore({
     const stop = useCallback(() => {
         if (nostalgistRef.current) {
             try {
-                nostalgistRef.current.exit();
+                nostalgistRef.current.exit({ removeCanvas: false });
             } catch (err) {
                 console.error('[Nostalgist] Exit error:', err);
             }
