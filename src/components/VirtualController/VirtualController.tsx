@@ -36,6 +36,10 @@ export interface VirtualControllerProps {
   onPause: () => void;
   /** Resume game (after hold mode exit) */
   onResume: () => void;
+  /** Whether the on-screen buttons are visible (false when physical controller connected) */
+  virtualControlsVisible?: boolean;
+  /** Toggle on-screen button visibility */
+  onToggleVirtualControls?: () => void;
 }
 
 /**
@@ -52,6 +56,8 @@ export default function VirtualController({
   onButtonUp,
   onPause,
   onResume,
+  virtualControlsVisible = true,
+  onToggleVirtualControls,
 }: VirtualControllerProps) {
   const { isMobile, isLandscape, isPortrait } = useMobile();
   const [pressedButtons, setPressedButtons] = useState<Set<string>>(new Set());
@@ -389,46 +395,52 @@ export default function VirtualController({
         onHoldToggle={toggleHoldMode}
         onTurboToggle={toggleTurboMode}
         systemColor={systemColor}
+        isControlsVisible={virtualControlsVisible}
+        onControlsToggle={onToggleVirtualControls}
       />
 
-      {/* Unified D-pad */}
-      <Dpad
-        size={dpadSize}
-        x={14}
-        y={finalDpadY}
-        containerWidth={containerSize.width || window.innerWidth}
-        containerHeight={containerSize.height || window.innerHeight}
-        systemColor={systemColor}
-        isLandscape={isLandscape}
-        customPosition={getPosition('up', isLandscape)} // 'up' acts as dpad position key
-        onPositionChange={isLocked ? undefined : positionHandlerMap['up']}
-        hapticsEnabled={hapticsEnabled}
-        onButtonDown={onButtonDown}
-        onButtonUp={onButtonUp}
-      />
-
-      {/* Other buttons (A, B, Start, Select, etc.) */}
-      {memoizedButtonElements
-        .filter(({ buttonConfig }) => !DPAD_TYPES.includes(buttonConfig.type))
-        .map(({ buttonConfig, adjustedConfig, customPosition, width, height }) => (
-          <VirtualButton
-            key={buttonConfig.type}
-            config={adjustedConfig}
-            isPressed={pressedButtons.has(buttonConfig.type) || heldButtons.has(buttonConfig.type)}
-            onPress={handlePress}
-            onPressDown={handlePressDown}
-            onRelease={handleRelease}
-            containerWidth={width}
-            containerHeight={height}
-            customPosition={customPosition}
-            onPositionChange={isLocked ? undefined : positionHandlerMap[buttonConfig.type]}
+      {/* D-pad + buttons — hidden when physical controller is connected */}
+      {virtualControlsVisible && (
+        <>
+          <Dpad
+            size={dpadSize}
+            x={14}
+            y={finalDpadY}
+            containerWidth={containerSize.width || window.innerWidth}
+            containerHeight={containerSize.height || window.innerHeight}
+            systemColor={systemColor}
             isLandscape={isLandscape}
-            console={layout.console}
+            customPosition={getPosition('up', isLandscape)} // 'up' acts as dpad position key
+            onPositionChange={isLocked ? undefined : positionHandlerMap['up']}
             hapticsEnabled={hapticsEnabled}
-            mode={isHoldMode ? 'hold' : isTurboMode ? 'turbo' : 'normal'}
-            isHeld={heldButtons.has(buttonConfig.type)}
-            isInTurbo={turboButtons.has(buttonConfig.type)}
-          />))}
+            onButtonDown={onButtonDown}
+            onButtonUp={onButtonUp}
+          />
+
+          {/* Other buttons (A, B, Start, Select, etc.) */}
+          {memoizedButtonElements
+            .filter(({ buttonConfig }) => !DPAD_TYPES.includes(buttonConfig.type))
+            .map(({ buttonConfig, adjustedConfig, customPosition, width, height }) => (
+              <VirtualButton
+                key={buttonConfig.type}
+                config={adjustedConfig}
+                isPressed={pressedButtons.has(buttonConfig.type) || heldButtons.has(buttonConfig.type)}
+                onPress={handlePress}
+                onPressDown={handlePressDown}
+                onRelease={handleRelease}
+                containerWidth={width}
+                containerHeight={height}
+                customPosition={customPosition}
+                onPositionChange={isLocked ? undefined : positionHandlerMap[buttonConfig.type]}
+                isLandscape={isLandscape}
+                console={layout.console}
+                hapticsEnabled={hapticsEnabled}
+                mode={isHoldMode ? 'hold' : isTurboMode ? 'turbo' : 'normal'}
+                isHeld={heldButtons.has(buttonConfig.type)}
+                isInTurbo={turboButtons.has(buttonConfig.type)}
+              />))}
+        </>
+      )}
 
       {/* Mode Overlay (Hold, Turbo, or Layout) */}
       {(isHoldMode || isTurboMode || !isLocked) && (

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Settings, Move, Hand, Zap } from 'lucide-react';
+import { Settings, Move, Hand, Zap, Gamepad2 } from 'lucide-react';
 
 interface UtilsFABProps {
     isLayoutActive: boolean;
@@ -11,6 +11,8 @@ interface UtilsFABProps {
     onHoldToggle: () => void;
     onTurboToggle: () => void;
     systemColor?: string;
+    isControlsVisible?: boolean;
+    onControlsToggle?: () => void;
 }
 
 /**
@@ -27,11 +29,13 @@ export default function UtilsFAB({
     onHoldToggle,
     onTurboToggle,
     systemColor = '#00FF41',
+    isControlsVisible = true,
+    onControlsToggle,
 }: UtilsFABProps) {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // Check if any mode is currently active
-    const hasActiveMode = isLayoutActive || isHoldActive || isTurboActive;
+    // Check if any mode is currently active (controls hidden counts as active)
+    const hasActiveMode = isLayoutActive || isHoldActive || isTurboActive || !isControlsVisible;
 
     // Auto-collapse after 3 seconds
     useEffect(() => {
@@ -137,6 +141,23 @@ export default function UtilsFAB({
                             style={{ color: isTurboActive ? systemColor : 'rgba(255,255,255,0.7)' }}
                         />
                     </span>
+
+                    {/* Show/Hide virtual controls */}
+                    {onControlsToggle && (
+                        <>
+                            <span className="w-px h-4 bg-white/20" />
+                            <span
+                                onClick={() => handleOptionClick(onControlsToggle)}
+                                className="cursor-pointer hover:scale-110 transition-transform"
+                                title={isControlsVisible ? 'Hide controls' : 'Show controls'}
+                            >
+                                <Gamepad2
+                                    size={16}
+                                    style={{ color: !isControlsVisible ? systemColor : 'rgba(255,255,255,0.7)' }}
+                                />
+                            </span>
+                        </>
+                    )}
                 </div>
             )}
         </button>

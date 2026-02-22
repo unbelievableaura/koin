@@ -50,6 +50,7 @@ const GamePlayerInner = memo(function GamePlayerInner(
     const [biosModalOpen, setBiosModalOpen] = useState(false);
     const [showShortcutsModal, setShowShortcutsModal] = useState(false);
     const [settingsModalOpen, setSettingsModalOpen] = useState(false);
+    const [virtualControlsVisible, setVirtualControlsVisible] = useState(true);
 
     // -- Derived Props from Persistence (if not overridden by direct props) --
     // Use props.shader if provided, otherwise persistent shader
@@ -162,6 +163,11 @@ const GamePlayerInner = memo(function GamePlayerInner(
         status,
         isPerformanceMode,
     } = nostalgist;
+
+    // Auto-hide virtual controls when a physical gamepad connects, restore on disconnect
+    useEffect(() => {
+        setVirtualControlsVisible(connectedCount === 0);
+    }, [connectedCount]);
 
     // -- Debug: High Performance Mode --
     useEffect(() => {
@@ -363,6 +369,8 @@ const GamePlayerInner = memo(function GamePlayerInner(
                             onButtonUp={nostalgist.pressUp}
                             onPause={nostalgist.pause}
                             onResume={nostalgist.resume}
+                            virtualControlsVisible={virtualControlsVisible}
+                            onToggleVirtualControls={() => setVirtualControlsVisible(v => !v)}
                         />
                     )}
 
