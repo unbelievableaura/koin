@@ -248,7 +248,6 @@ export function useEmulatorCore({
                     rgui_show_start_screen: false,
                     video_font_enable: false,
                     input_menu_toggle_gamepad_combo: 0,
-                    input_autodetect_enable: false, // Disable autoconfig so custom gamepad mappings aren't overridden
                     rewind_enable: true, // Default, can be overridden by optimizedConfig
                     rewind_granularity: 1,
                     rewind_buffer_size: 100,
@@ -307,8 +306,6 @@ export function useEmulatorCore({
             const nostalgist = await Nostalgist.prepare(prepareOptions);
 
             nostalgistRef.current = nostalgist;
-
-
 
             setStatus('ready');
         } catch (err) {
@@ -387,8 +384,8 @@ export function useEmulatorCore({
         return () => {
             if (nostalgistRef.current) {
                 console.log('[Nostalgist] Cleaning up emulator on unmount');
-                stop();
             }
+            stop(); // Also cleans up the autoconfig suppressor
         };
     }, [stop]);
 

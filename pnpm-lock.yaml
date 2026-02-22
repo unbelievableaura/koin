@@ -18,8 +18,8 @@ importers:
         specifier: ^0.300.0
         version: 0.300.0(react@19.2.3)
       nostalgist:
-        specifier: ^0.20.2
-        version: 0.20.2
+        specifier: ^0.21.0
+        version: 0.21.0
       patch-package:
         specifier: ^8.0.1
         version: 8.0.1
@@ -757,8 +757,8 @@ packages:
     resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
-  nostalgist@0.20.2:
-    resolution: {integrity: sha512-+W2Tjzx7o2Qqc+zualAed5Ao0FqMjFCTZ3TpXotf3wmJTVODiMvoHTaIBx9Zo3TIDGoklMD11o/D3QGT5wvmiQ==}
+  nostalgist@0.21.0:
+    resolution: {integrity: sha512-xzxDad3yMubgkowJdv/qtQm0aRKIG1kW+GGPyG+n7hvPCPq3jBZ23YZReLkWrp+DVCXEEEdhojkP7eqfWC0MGg==}
     engines: {node: '>=24.7.0'}
 
   object-assign@4.1.1:
@@ -1607,7 +1607,7 @@ snapshots:
 
   normalize-path@3.0.0: {}
 
-  nostalgist@0.20.2:
+  nostalgist@0.21.0:
     dependencies:
       '@types/emscripten': 1.41.5
       '@types/ini': 4.1.1
