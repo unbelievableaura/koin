@@ -4,9 +4,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { GamePlayer, Cheat, RACredentials, SHADER_PRESETS, ShaderPresetId } from 'koin.js';
 import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown, Github, FileCode, Cpu, Palette } from 'lucide-react';
 
-// Import player version from parent package.json
-import packageJson from '../../../package.json';
 import * as SaveManager from '../lib/save-manager';
+
+const PLAYER_VERSION = process.env.NEXT_PUBLIC_KOIN_VERSION || '1.3.4';
 
 // System Data
 const SYSTEMS = [
@@ -282,7 +282,7 @@ export default function GameDashboard() {
                                 <div className="w-1.5 h-1.5 rounded-full bg-[#FFD600]"></div>
                                 <div className="w-1.5 h-1.5 rounded-full bg-[#76FF03]"></div>
                             </div>
-                            <span className="text-white font-mono text-[9px] uppercase">PLAYER v{packageJson.version}</span>
+                            <span className="text-white font-mono text-[9px] uppercase">PLAYER v{PLAYER_VERSION}</span>
                         </div>
 
                         <div className="px-6 pb-6 space-y-6">
@@ -431,7 +431,7 @@ export default function GameDashboard() {
                             <div className="text-[9px] text-gray-300">
                                 CORE BUILT ON <a href="https://nostalgist.js.org/" target="_blank" rel="noopener noreferrer" className="hover:text-gray-500 underline">NOSTALGIST.JS</a>
                             </div>
-                            <div>v{packageJson.version}</div>
+                            <div>v{PLAYER_VERSION}</div>
                         </div>
                     </div>
                 </div>
