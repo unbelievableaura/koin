@@ -1,0 +1,188 @@
+import ControlMapper from './Modals/ControlMapper';
+import GamepadMapper from './Modals/GamepadMapper';
+import CheatModal from './Modals/CheatModal';
+import SavedSlotModal from './Modals/SaveSlotModal';
+import BiosSelectionModal from './Modals/BiosSelectionModal';
+import SettingsModal from './Modals/SettingsModal';
+import { KeyboardMapping } from '../lib/controls';
+import { SaveSlot } from './types';
+
+interface GameModalsProps {
+    controlsModalOpen: boolean;
+    setControlsModalOpen: (open: boolean) => void;
+    controls: KeyboardMapping;
+    saveControls: (newControls: KeyboardMapping) => void;
+    system: string;
+    onResume: () => void;
+
+    gamepadModalOpen: boolean;
+    setGamepadModalOpen: (open: boolean) => void;
+    gamepads: any[]; // Using any[] for now as Gamepad type might be complex or standard
+    systemColor: string;
+    onGamepadSave?: () => void;
+
+    cheatsModalOpen: boolean;
+    setCheatsModalOpen: (open: boolean) => void;
+    cheats: any[]; // Unified cheat list
+    activeCheats: Set<string>;
+    onToggleCheat: (cheatId: string) => void;
+    onAddManualCheat?: (code: string, description: string) => void;
+
+    // Save Slot Modal
+    saveModalOpen: boolean;
+    setSaveModalOpen: (open: boolean) => void;
+    saveModalMode: 'save' | 'load';
+    saveSlots: SaveSlot[];
+    isSlotLoading: boolean;
+    actioningSlot: number | null;
+    onSlotSelect: (slot: number) => void;
+    onSlotDelete: (slot: number) => void;
+    maxSlots?: number;
+    currentTier?: string;
+    onUpgrade?: () => void;
+
+    // Bios Modal
+    biosModalOpen: boolean;
+    setBiosModalOpen: (open: boolean) => void;
+    availableBios?: { id: string; name: string; description?: string }[];
+    currentBiosId?: string;
+    onSelectBios?: (biosId: string) => void;
+
+    // Settings Modal
+    settingsModalOpen: boolean;
+    setSettingsModalOpen: (open: boolean) => void;
+    currentLanguage: string;
+    onLanguageChange: (lang: 'en' | 'es' | 'fr') => void;
+    hapticsEnabled: boolean;
+    onToggleHaptics: () => void;
+}
+
+export default function GameModals({
+    controlsModalOpen,
+    setControlsModalOpen,
+    controls,
+    saveControls,
+    system,
+    onResume,
+
+    gamepadModalOpen,
+    setGamepadModalOpen,
+    gamepads,
+    systemColor,
+    onGamepadSave,
+
+    cheatsModalOpen,
+    setCheatsModalOpen,
+    cheats,
+    activeCheats,
+    onToggleCheat,
+    onAddManualCheat,
+
+    saveModalOpen,
+    setSaveModalOpen,
+    saveModalMode,
+    saveSlots,
+    isSlotLoading,
+    actioningSlot,
+    onSlotSelect,
+    onSlotDelete,
+    maxSlots,
+    currentTier,
+    onUpgrade,
+
+    biosModalOpen,
+    setBiosModalOpen,
+    availableBios,
+    currentBiosId,
+    onSelectBios,
+
+    settingsModalOpen,
+    setSettingsModalOpen,
+    currentLanguage,
+    onLanguageChange,
+    hapticsEnabled,
+    onToggleHaptics,
+}: GameModalsProps) {
+    return (
+        <>
+            <ControlMapper
+                isOpen={controlsModalOpen}
+                controls={controls}
+                onSave={saveControls}
+                onClose={() => {
+                    setControlsModalOpen(false);
+                    onResume();
+                }}
+                system={system}
+            />
+
+            <GamepadMapper
+                isOpen={gamepadModalOpen}
+                gamepads={gamepads}
+                onClose={() => {
+                    setGamepadModalOpen(false);
+                    onResume();
+                }}
+                onSave={() => onGamepadSave?.()}
+                systemColor={systemColor}
+            />
+
+            <CheatModal
+                isOpen={cheatsModalOpen}
+                cheats={cheats}
+                activeCheats={activeCheats}
+                onToggle={onToggleCheat}
+                onAddManualCheat={onAddManualCheat}
+                onClose={() => {
+                    setCheatsModalOpen(false);
+                    onResume();
+                }}
+            />
+
+            <SavedSlotModal
+                isOpen={saveModalOpen}
+                mode={saveModalMode}
+                slots={saveSlots}
+                isLoading={isSlotLoading}
+                actioningSlot={actioningSlot}
+                onSelect={onSlotSelect}
+                onDelete={onSlotDelete}
+                onClose={() => {
+                    setSaveModalOpen(false);
+                    onResume();
+                }}
+                maxSlots={maxSlots}
+                currentTier={currentTier}
+                onUpgrade={onUpgrade}
+            />
+
+            <BiosSelectionModal
+                isOpen={biosModalOpen}
+                biosOptions={availableBios || []}
+                currentBiosId={currentBiosId}
+                onSelectBios={(id) => {
+                    setBiosModalOpen(false);
+                    onSelectBios?.(id);
+                }}
+                onClose={() => {
+                    setBiosModalOpen(false);
+                    onResume();
+                }}
+                systemColor={systemColor}
+            />
+
+            <SettingsModal
+                isOpen={settingsModalOpen}
+                onClose={() => {
+                    setSettingsModalOpen(false);
+                    onResume();
+                }}
+                currentLanguage={currentLanguage}
+                onLanguageChange={onLanguageChange}
+                systemColor={systemColor}
+                hapticsEnabled={hapticsEnabled}
+                onToggleHaptics={onToggleHaptics}
+            />
+        </>
+    );
+}

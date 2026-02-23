@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useCallback } from 'react';
-import { GamePlayer, Cheat, RACredentials, SHADER_PRESETS, ShaderPresetId } from 'koin.js';
+import { GamePlayer, Cheat, RACredentials, SHADER_PRESETS, ShaderPresetId } from 'koin-lib';
 import { Settings, Gamepad2, Upload, Play, Disc, User, X, ChevronDown, Github, FileCode, Cpu, Palette } from 'lucide-react';
 
 import * as SaveManager from '../lib/save-manager';

@@ -1,0 +1,166 @@
+'use client';
+
+import { memo } from 'react';
+import { PlayerControlsProps } from './types';
+import { PlaybackControls } from './PlayerControls/PlaybackControls';
+import { SaveLoadControls } from './PlayerControls/SaveLoadControls';
+import { SettingsControls } from './PlayerControls/SettingsControls';
+import MobileControlDrawer from './PlayerControls/MobileControlDrawer';
+
+const PlayerControls = memo(function PlayerControls({
+    isPaused,
+    isRunning,
+    speed,
+    isRewinding,
+    rewindBufferSize,
+    onPauseToggle,
+    onRestart,
+    onSave,
+    onLoad,
+    onSpeedChange,
+    onRewindStart,
+    onRewindStop,
+    onScreenshot,
+    onFullscreen,
+    onControls,
+    onCheats,
+    onRetroAchievements,
+    onShowShortcuts,
+    onExit,
+    disabled = false,
+    loadDisabled = false,
+    saveDisabled = false,
+    hardcoreRestrictions,
+    raConnected = false,
+    raGameFound = false,
+    raAchievementCount = 0,
+    raIsIdentifying = false,
+    autoSaveEnabled = false,
+    autoSaveProgress = 0,
+    autoSaveState = 'idle',
+    autoSavePaused = false,
+    onAutoSaveToggle,
+    systemColor = '#00FF41',
+    gamepadCount = 0,
+    onGamepadSettings,
+    onSettings,
+    volume = 100,
+    isMuted = false,
+    onVolumeChange,
+    onToggleMute,
+    onRecordToggle,
+    isRecording = false,
+    currentShader,
+    onShaderChange,
+    isMobile = false, // Default to false if not provided
+}: PlayerControlsProps & { loadDisabled?: boolean; saveDisabled?: boolean }) {
+
+    // Shared controls content
+    const controlsContent = (
+        <>
+            <PlaybackControls
+                isPaused={isPaused}
+                isRunning={isRunning}
+                speed={speed}
+                isRewinding={isRewinding}
+                rewindBufferSize={rewindBufferSize}
+                onPauseToggle={onPauseToggle}
+                onRestart={onRestart}
+                onSpeedChange={onSpeedChange}
+                onRewindStart={onRewindStart}
+                onRewindStop={onRewindStop}
+                volume={volume}
+                isMuted={isMuted}
+                onVolumeChange={onVolumeChange}
+                onToggleMute={onToggleMute}
+                disabled={disabled}
+                systemColor={systemColor}
+                hardcoreRestrictions={hardcoreRestrictions}
+            />
+
+            {/* Divider visible only within the drawer (when not in desktop bar) */}
+            <div className={`w-full h-px bg-white/10 my-4 ${isMobile ? '' : 'sm:hidden'}`} />
+
+            <SaveLoadControls
+                onSave={onSave}
+                onLoad={onLoad}
+                onScreenshot={onScreenshot}
+                onRecordToggle={onRecordToggle}
+                isRecording={isRecording}
+                disabled={disabled}
+                loadDisabled={loadDisabled}
+                saveDisabled={saveDisabled}
+                systemColor={systemColor}
+                hardcoreRestrictions={hardcoreRestrictions}
+                autoSaveEnabled={autoSaveEnabled}
+                autoSaveProgress={autoSaveProgress}
+                autoSaveState={autoSaveState}
+                autoSavePaused={autoSavePaused}
+                onAutoSaveToggle={onAutoSaveToggle}
+            />
+
+            {/* Divider visible only within the drawer */}
+            <div className={`w-full h-px bg-white/10 my-4 ${isMobile ? '' : 'sm:hidden'}`} />
+
+            <SettingsControls
+                onFullscreen={onFullscreen}
+                onControls={onControls}
+                onGamepadSettings={onGamepadSettings}
+                onSettings={onSettings}
+                onCheats={onCheats}
+                onRetroAchievements={onRetroAchievements}
+                onShowShortcuts={onShowShortcuts}
+                onExit={onExit}
+                currentShader={currentShader}
+                onShaderChange={onShaderChange}
+                isRunning={isRunning}
+                disabled={disabled}
+                systemColor={systemColor}
+                gamepadCount={gamepadCount}
+                hardcoreRestrictions={hardcoreRestrictions}
+                raConnected={raConnected}
+                raGameFound={raGameFound}
+                raAchievementCount={raAchievementCount}
+                raIsIdentifying={raIsIdentifying}
+                isMobile={isMobile}
+            />
+        </>
+    );
+
+    // Determines if we should show the desktop bar layout
+    // Show only if NOT mobile AND screen is large enough (sm)
+    const showDesktopBar = !isMobile;
+
+    // Determines if we should show the mobile drawer layout
+    // Show if IS mobile OR screen is small (default behavior)
+    // Note: MobileControlDrawer itself has sm:hidden but we can wrap it or ensure it shows.
+    // However, MobileControlDrawer has built-in 'sm:hidden' className.
+    // If isMobile is true, we want to show it regardless of screen width.
+    // We can't easily strip the class inside without modifying the component or wrapping it.
+    // Let's modify the return structure to control display here.
+
+    return (
+        <>
+            {/* Mobile: FAB + Drawer */}
+            {/* If isMobile is strictly true, we enforce display even on larger screens (landscape mobile) */}
+            {/* Or if screen is small (standard responsive behavior) */}
+            <div className={showDesktopBar ? 'sm:hidden' : 'block'}>
+                <MobileControlDrawer systemColor={systemColor}>
+                    {controlsContent}
+                </MobileControlDrawer>
+            </div>
+
+            {/* Desktop: Static bar */}
+            {/* Only visible if NOT mobile mode */}
+            {showDesktopBar && (
+                <div className="hidden sm:flex w-full bg-black/90 backdrop-blur-md border-t border-white/10 shrink-0 z-50 overflow-x-auto no-scrollbar">
+                    <div className="flex items-center min-w-max mx-auto gap-4 px-8 py-4">
+                        {controlsContent}
+                    </div>
+                </div>
+            )}
+        </>
+    );
+});
+
+export default PlayerControls;

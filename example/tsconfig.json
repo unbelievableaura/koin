@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "koin-lib": [
+        "./lib/koin/index.ts"
       ]
     }
   },

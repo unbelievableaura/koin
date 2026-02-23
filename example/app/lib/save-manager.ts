@@ -1,4 +1,4 @@
-import { SaveSlot } from 'koin.js';
+import { SaveSlot } from 'koin-lib';
 
 const DB_NAME = 'RetroSagaSaves';
 const STORE_NAME = 'saves';
