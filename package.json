@@ -33,8 +33,7 @@
         "build": "tsup && tailwindcss -i ./src/styles.css -o ./dist/styles.css",
         "build:element": "tsup --config tsup.element.config.ts",
         "dev": "tsup --watch",
-        "lint": "eslint src",
-        "postinstall": "node -e \"if (require('fs').existsSync('node_modules/nostalgist')) require('child_process').execSync('npx patch-package', {stdio: 'inherit'})\""
+        "lint": "eslint src"
     },
     "keywords": [
         "retro",
@@ -56,7 +55,6 @@
         "framer-motion": "^11.0.0",
         "lucide-react": "^0.300.0",
         "nostalgist": "^0.21.0",
-        "patch-package": "^8.0.1",
         "tailwind-merge": "^2.0.0"
     },
     "devDependencies": {
